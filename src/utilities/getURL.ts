@@ -1,12 +1,19 @@
 import canUseDOM from './canUseDOM'
 
 export const getServerSideURL = () => {
-  return (
+  let url =
     process.env.NEXT_PUBLIC_SERVER_URL ||
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : 'http://localhost:3000')
-  )
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+    process.env.RAILWAY_PUBLIC_DOMAIN ||
+    ''
+
+  // Add protocol if missing for Vercel/Railway domains
+  if (url && !url.startsWith('http')) {
+    url = `https://${url}`
+  }
+
+  // Fallback to localhost in development
+  return url || 'http://localhost:3000'
 }
 
 export const getClientSideURL = () => {
