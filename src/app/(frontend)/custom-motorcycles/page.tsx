@@ -12,7 +12,7 @@ export default async function Page() {
   const payload = await getPayload({ config: configPromise })
 
   const motorcycles = await payload.find({
-    collection: 'custom-motorcycles',
+    collection: 'custom-motorcycles' as any,
     depth: 1,
     limit: 12,
     overrideAccess: false,

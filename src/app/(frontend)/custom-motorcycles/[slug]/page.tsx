@@ -8,21 +8,28 @@ import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const motorcycles = await payload.find({
-    collection: 'custom-motorcycles',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const motorcycles = await payload.find({
+      collection: 'custom-motorcycles' as any,
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        slug: true,
+      },
+    })
 
-  return motorcycles.docs.map(({ slug }) => {
-    return { slug }
-  })
+    const params =
+      motorcycles?.docs?.filter((motorcycle) => motorcycle?.slug)?.map(({ slug }) => ({ slug })) ||
+      []
+
+    return params
+  } catch (error) {
+    console.error('Error generating static params for custom motorcycles:', error)
+    return []
+  }
 }
 
 type Args = {
@@ -54,24 +61,20 @@ export default async function Page({ params: paramsPromise }: Args) {
       <div className="container">
         {motorcycle.gallery && motorcycle.gallery.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {motorcycle.gallery.map((item, index) => (
-              <div key={index} className="flex flex-col gap-2">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gray-100">
-                  {item.image && (
-                    <Media
-                      resource={item.image}
-                      fill
-                      imgClassName="object-cover"
-                    />
+            {motorcycle.gallery
+              .filter((item) => item?.image)
+              .map((item, index) => (
+                <div key={index} className="flex flex-col gap-2">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gray-100">
+                    <Media resource={item.image} fill imgClassName="object-cover" />
+                  </div>
+                  {item.caption && (
+                    <p className="text-sm text-muted-foreground text-center italic">
+                      {item.caption}
+                    </p>
                   )}
                 </div>
-                {item.caption && (
-                  <p className="text-sm text-muted-foreground text-center italic">
-                    {item.caption}
-                  </p>
-                )}
-              </div>
-            ))}
+              ))}
           </div>
         ) : (
           <div className="text-center">No images in gallery.</div>
@@ -97,7 +100,7 @@ const queryMotorcycleBySlug = cache(async ({ slug }: { slug: string }) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
-    collection: 'custom-motorcycles',
+    collection: 'custom-motorcycles' as any,
     draft,
     limit: 1,
     overrideAccess: draft,
