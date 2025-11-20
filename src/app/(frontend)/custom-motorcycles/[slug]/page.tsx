@@ -6,12 +6,13 @@ import { Media } from '@/components/Media'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
+import type { CustomMotorcycle } from '@/payload-types'
 
 export async function generateStaticParams() {
   try {
     const payload = await getPayload({ config: configPromise })
     const motorcycles = await payload.find({
-      collection: 'custom-motorcycles' as any,
+      collection: 'custom-motorcycles',
       draft: false,
       limit: 1000,
       overrideAccess: false,
@@ -62,7 +63,10 @@ export default async function Page({ params: paramsPromise }: Args) {
         {motorcycle.gallery && motorcycle.gallery.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {motorcycle.gallery
-              .filter((item) => item?.image)
+              .filter(
+                (item): item is NonNullable<CustomMotorcycle['gallery']>[number] =>
+                  item?.image != null,
+              )
               .map((item, index) => (
                 <div key={index} className="flex flex-col gap-2">
                   <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gray-100">
@@ -100,7 +104,7 @@ const queryMotorcycleBySlug = cache(async ({ slug }: { slug: string }) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
-    collection: 'custom-motorcycles' as any,
+    collection: 'custom-motorcycles',
     draft,
     limit: 1,
     overrideAccess: draft,
