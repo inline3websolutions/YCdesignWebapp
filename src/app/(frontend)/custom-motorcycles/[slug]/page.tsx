@@ -16,6 +16,7 @@ export async function generateStaticParams() {
       draft: false,
       limit: 1000,
       overrideAccess: false,
+      depth: 0,
       pagination: false,
       select: {
         slug: true,
@@ -107,6 +108,7 @@ const queryMotorcycleBySlug = cache(async ({ slug }: { slug: string }) => {
     collection: 'custom-motorcycles',
     draft,
     limit: 1,
+    depth: 1,
     overrideAccess: draft,
     where: {
       slug: {

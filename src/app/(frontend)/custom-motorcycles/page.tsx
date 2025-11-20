@@ -9,14 +9,19 @@ export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function Page() {
-  const payload = await getPayload({ config: configPromise })
-
-  const motorcycles = await payload.find({
-    collection: 'custom-motorcycles',
-    depth: 1,
-    limit: 12,
-    overrideAccess: false,
-  })
+  let motorcycles
+  try {
+    const payload = await getPayload({ config: configPromise })
+    motorcycles = await payload.find({
+      collection: 'custom-motorcycles',
+      depth: 1,
+      limit: 12,
+      overrideAccess: false,
+    })
+  } catch (error) {
+    console.error('Error fetching custom motorcycles:', error)
+    motorcycles = { docs: [] }
+  }
 
   return (
     <div className="pt-24 pb-24">
