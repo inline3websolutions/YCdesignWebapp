@@ -72,7 +72,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
-    'custom-motorcycles': CustomMotorcycle;
+    'restored-moto': RestoredMoto;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -95,7 +95,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    'custom-motorcycles': CustomMotorcyclesSelect<false> | CustomMotorcyclesSelect<true>;
+    'restored-moto': RestoredMotoSelect<false> | RestoredMotoSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -782,16 +782,46 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "custom-motorcycles".
+ * via the `definition` "restored-moto".
  */
-export interface CustomMotorcycle {
+export interface RestoredMoto {
   id: string;
-  title: string;
-  gallery?:
+  name: string;
+  manufacturer: string;
+  year: number;
+  heroImage?: (string | null) | Media;
+  images?: (string | Media)[] | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedMotorcycles?: (string | RestoredMoto)[] | null;
+  categories?: (string | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (string | User)[] | null;
+  populatedAuthors?:
     | {
-        image: string | Media;
-        caption?: string | null;
         id?: string | null;
+        name?: string | null;
       }[]
     | null;
   /**
@@ -801,6 +831,7 @@ export interface CustomMotorcycle {
   slug: string;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -822,6 +853,10 @@ export interface Redirect {
       | ({
           relationTo: 'posts';
           value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'restored-moto';
+          value: string | RestoredMoto;
         } | null);
     url?: string | null;
   };
@@ -855,10 +890,15 @@ export interface Search {
   id: string;
   title?: string | null;
   priority?: number | null;
-  doc: {
-    relationTo: 'posts';
-    value: string | Post;
-  };
+  doc:
+    | {
+        relationTo: 'posts';
+        value: string | Post;
+      }
+    | {
+        relationTo: 'restored-moto';
+        value: string | RestoredMoto;
+      };
   slug?: string | null;
   meta?: {
     title?: string | null;
@@ -1013,8 +1053,8 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
-        relationTo: 'custom-motorcycles';
-        value: string | CustomMotorcycle;
+        relationTo: 'restored-moto';
+        value: string | RestoredMoto;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1383,21 +1423,37 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "custom-motorcycles_select".
+ * via the `definition` "restored-moto_select".
  */
-export interface CustomMotorcyclesSelect<T extends boolean = true> {
-  title?: T;
-  gallery?:
+export interface RestoredMotoSelect<T extends boolean = true> {
+  name?: T;
+  manufacturer?: T;
+  year?: T;
+  heroImage?: T;
+  images?: T;
+  content?: T;
+  relatedMotorcycles?: T;
+  categories?: T;
+  meta?:
     | T
     | {
+        title?: T;
         image?: T;
-        caption?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  authors?: T;
+  populatedAuthors?:
+    | T
+    | {
         id?: T;
+        name?: T;
       };
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1794,6 +1850,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'restored-moto';
+          value: string | RestoredMoto;
         } | null);
     global?: string | null;
     user?: (string | null) | User;
