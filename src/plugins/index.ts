@@ -18,7 +18,11 @@ const generateTitle: GenerateTitle<Post | Page | RestoredMoto> = ({ doc }) => {
   if ('name' in doc && doc.name) {
     return `${doc.name} | Payload Website Template`
   }
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+  // For Post and Page, use 'title' field
+  if ('title' in doc && doc.title) {
+    return `${doc.title} | Payload Website Template`
+  }
+  return 'Payload Website Template'
 }
 
 const generateURL: GenerateURL<Post | Page | RestoredMoto> = ({ doc, collection }) => {
