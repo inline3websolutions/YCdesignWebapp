@@ -25,23 +25,24 @@ const generateTitle: GenerateTitle<Post | Page | RestoredMoto> = ({ doc }) => {
   return 'Payload Website Template'
 }
 
-const generateURL: GenerateURL<Post | Page | RestoredMoto> = ({ doc, collection }) => {
+const generateURL: GenerateURL<Post | Page | RestoredMoto> = ({ doc }) => {
   const url = getServerSideURL()
 
   if (!doc?.slug) {
     return url
   }
 
-  // Handle different collection paths
-  if (collection === 'restored-moto') {
+  // Check if it's RestoredMoto by checking for 'name' field
+  if ('name' in doc && 'manufacturer' in doc && 'year' in doc) {
     return `${url}/restored-moto/${doc.slug}`
   }
 
-  if (collection === 'posts') {
+  // Check if it's Post by checking for 'content' and 'heroImage'
+  if ('content' in doc && !('layout' in doc)) {
     return `${url}/posts/${doc.slug}`
   }
 
-  // Pages and other collections
+  // Pages and other collections (Pages have 'layout' field)
   return `${url}/${doc.slug}`
 }
 
