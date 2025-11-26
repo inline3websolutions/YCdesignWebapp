@@ -74,6 +74,8 @@ export interface Config {
     users: User;
     'restored-moto': RestoredMoto;
     'custom-motorcycles': CustomMotorcycle;
+    sales: Sale;
+    'contact-submissions': ContactSubmission;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -98,6 +100,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'restored-moto': RestoredMotoSelect<false> | RestoredMotoSelect<true>;
     'custom-motorcycles': CustomMotorcyclesSelect<false> | CustomMotorcyclesSelect<true>;
+    sales: SalesSelect<false> | SalesSelect<true>;
+    'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -1028,6 +1032,76 @@ export interface CustomMotorcycle {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sales".
+ */
+export interface Sale {
+  id: string;
+  title: string;
+  price: string;
+  status: 'available' | 'reserved' | 'sold';
+  year: number;
+  engine: string;
+  mileage: string;
+  mainImage: string | Media;
+  gallery?: (string | Media)[] | null;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  features?:
+    | {
+        feature: string;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions".
+ */
+export interface ContactSubmission {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject: 'restoration' | 'custom' | 'purchase' | 'general';
+  bikeInterest?: string | null;
+  message: string;
+  status?: ('new' | 'in-progress' | 'responded' | 'closed') | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1252,6 +1326,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'custom-motorcycles';
         value: string | CustomMotorcycle;
+      } | null)
+    | ({
+        relationTo: 'sales';
+        value: string | Sale;
+      } | null)
+    | ({
+        relationTo: 'contact-submissions';
+        value: string | ContactSubmission;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1805,6 +1887,56 @@ export interface CustomMotorcyclesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sales_select".
+ */
+export interface SalesSelect<T extends boolean = true> {
+  title?: T;
+  price?: T;
+  status?: T;
+  year?: T;
+  engine?: T;
+  mileage?: T;
+  mainImage?: T;
+  gallery?: T;
+  description?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions_select".
+ */
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  bikeInterest?: T;
+  message?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
@@ -2206,6 +2338,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'custom-motorcycles';
           value: string | CustomMotorcycle;
+        } | null)
+      | ({
+          relationTo: 'sales';
+          value: string | Sale;
         } | null);
     global?: string | null;
     user?: (string | null) | User;
