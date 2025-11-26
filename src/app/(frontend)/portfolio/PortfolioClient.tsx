@@ -28,8 +28,12 @@ const PortfolioClient: React.FC<PortfolioClientProps> = ({ projects }) => {
     const manufacturersSet = new Set<string>()
 
     projects.forEach((p) => {
-      if (p.year) yearsSet.add(p.year)
-      if (p.engine) manufacturersSet.add(p.engine) // engine field contains manufacturer
+      if (p.year && p.year !== 'undefined' && p.year !== 'null') {
+        yearsSet.add(p.year)
+      }
+      if (p.engine && p.engine.trim() !== '') {
+        manufacturersSet.add(p.engine)
+      }
     })
 
     return {
@@ -72,8 +76,9 @@ const PortfolioClient: React.FC<PortfolioClientProps> = ({ projects }) => {
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
       const matchesCategory = activeFilter === 'All' || p.category === activeFilter
-      const matchesYear = yearFilter === 'all' || p.year === yearFilter
-      const matchesManufacturer = manufacturerFilter === 'all' || p.engine === manufacturerFilter
+      const matchesYear = yearFilter === 'all' || (p.year && p.year === yearFilter)
+      const matchesManufacturer =
+        manufacturerFilter === 'all' || (p.engine && p.engine === manufacturerFilter)
       return matchesCategory && matchesYear && matchesManufacturer
     })
   }, [projects, activeFilter, yearFilter, manufacturerFilter])
@@ -94,7 +99,7 @@ const PortfolioClient: React.FC<PortfolioClientProps> = ({ projects }) => {
   return (
     <div ref={containerRef} className="pt-24 pb-12 min-h-screen transition-colors duration-500">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 gap-8">
+        <div className="flex flex-col justify-between items-start lg:justify-between mb-12 gap-8">
           <div>
             <h1 className="text-5xl md:text-7xl font-syne font-bold text-zinc-900 dark:text-white mb-6 transition-colors duration-500">
               WORKSHOP <span className="text-yc-yellow">ARCHIVES</span>

@@ -17,6 +17,7 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidateMoto } from './hooks/revalidateMoto'
+import { handleLegacyManufacturer } from './hooks/handleLegacyManufacturer'
 
 import {
   MetaDescriptionField,
@@ -79,9 +80,23 @@ export const RestoredMoto: CollectionConfig<'restored-moto'> = {
           fields: [
             {
               name: 'manufacturer',
-              type: 'text',
-              required: true,
+              type: 'relationship',
+              relationTo: 'manufacturers',
+              required: false, // Optional to allow migration of legacy string data
               label: 'Manufacturer',
+              hasMany: false,
+              admin: {
+                allowCreate: true,
+                description: 'Select an existing manufacturer or create a new one',
+              },
+            },
+            {
+              name: 'manufacturerLegacy',
+              type: 'text',
+              admin: {
+                hidden: true, // Hidden field to preserve legacy data
+                readOnly: true,
+              },
             },
             {
               name: 'year',
@@ -89,7 +104,19 @@ export const RestoredMoto: CollectionConfig<'restored-moto'> = {
               required: true,
               label: 'Year',
               min: 1850,
-              max: new Date().getFullYear(),
+              max: new Date().getFullYear() + 1,
+              admin: {
+                step: 1,
+                description: 'Enter the motorcycle year (1850 - current year)',
+              },
+              validate: (value: number | null | undefined) => {
+                if (value === null || value === undefined) return 'Year is required'
+                if (!Number.isInteger(value)) return 'Year must be a whole number'
+                if (value < 1850) return 'Year must be 1850 or later'
+                if (value > new Date().getFullYear() + 1)
+                  return 'Year cannot be more than next year'
+                return true
+              },
             },
             {
               name: 'heroImage',
@@ -235,7 +262,7 @@ export const RestoredMoto: CollectionConfig<'restored-moto'> = {
   ],
   hooks: {
     afterChange: [revalidateMoto],
-    afterRead: [populateAuthors],
+    afterRead: [populateAuthors, handleLegacyManufacturer],
     afterDelete: [revalidateDelete],
   },
   versions: {

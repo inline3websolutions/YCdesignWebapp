@@ -6,10 +6,21 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
+import type { Manufacturer } from '@/payload-types'
 
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+
+// Helper function to get manufacturer name from relationship
+function getManufacturerName(
+  manufacturer: string | number | Manufacturer | null | undefined,
+): string {
+  if (!manufacturer) return ''
+  if (typeof manufacturer === 'string') return manufacturer // backwards compatibility
+  if (typeof manufacturer === 'number') return ''
+  return manufacturer.name || ''
+}
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -68,7 +79,7 @@ export default async function MotoPage({ params: paramsPromise }: Args) {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{moto.name}</h1>
           <div className="flex gap-4 text-lg text-gray-600 dark:text-gray-400 mb-8">
-            <span className="font-semibold">{moto.manufacturer}</span>
+            <span className="font-semibold">{getManufacturerName(moto.manufacturer)}</span>
             <span>•</span>
             <span>{moto.year}</span>
           </div>
@@ -148,7 +159,7 @@ export default async function MotoPage({ params: paramsPromise }: Args) {
                           {related.name}
                         </h3>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
-                          <p>{related.manufacturer}</p>
+                          <p>{getManufacturerName(related.manufacturer)}</p>
                           <p>{related.year}</p>
                         </div>
                       </div>

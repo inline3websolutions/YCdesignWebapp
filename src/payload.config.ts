@@ -14,6 +14,7 @@ import { RestoredMoto } from './collections/RestoredMoto'
 import { CustomMotorcycles } from './collections/CustomMotorcycles'
 import { Sales } from './collections/Sales'
 import { ContactSubmissions } from './collections/ContactSubmissions'
+import { Manufacturers } from './collections/Manufacturers'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -82,6 +83,7 @@ export default buildConfig({
     CustomMotorcycles,
     Sales,
     ContactSubmissions,
+    Manufacturers,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

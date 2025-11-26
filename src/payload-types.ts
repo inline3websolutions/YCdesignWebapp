@@ -76,6 +76,7 @@ export interface Config {
     'custom-motorcycles': CustomMotorcycle;
     sales: Sale;
     'contact-submissions': ContactSubmission;
+    manufacturers: Manufacturer;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -102,6 +103,7 @@ export interface Config {
     'custom-motorcycles': CustomMotorcyclesSelect<false> | CustomMotorcyclesSelect<true>;
     sales: SalesSelect<false> | SalesSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
+    manufacturers: ManufacturersSelect<false> | ManufacturersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -989,7 +991,14 @@ export interface Form {
 export interface RestoredMoto {
   id: string;
   name: string;
-  manufacturer: string;
+  /**
+   * Select an existing manufacturer or create a new one
+   */
+  manufacturer?: (string | null) | Manufacturer;
+  manufacturerLegacy?: string | null;
+  /**
+   * Enter the motorcycle year (1850 - current year)
+   */
   year: number;
   heroImage?: (string | null) | Media;
   images?: (string | Media)[] | null;
@@ -1036,13 +1045,38 @@ export interface RestoredMoto {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Manage motorcycle manufacturers for filtering
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "manufacturers".
+ */
+export interface Manufacturer {
+  id: string;
+  name: string;
+  logo?: (string | null) | Media;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "custom-motorcycles".
  */
 export interface CustomMotorcycle {
   id: string;
   name: string;
-  manufacturer: string;
+  /**
+   * Select an existing manufacturer or create a new one
+   */
+  manufacturer?: (string | null) | Manufacturer;
+  manufacturerLegacy?: string | null;
+  /**
+   * Enter the motorcycle year (1850 - current year)
+   */
   year: number;
   heroImage?: (string | null) | Media;
   images?: (string | Media)[] | null;
@@ -1392,6 +1426,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contact-submissions';
         value: string | ContactSubmission;
+      } | null)
+    | ({
+        relationTo: 'manufacturers';
+        value: string | Manufacturer;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1928,6 +1966,7 @@ export interface UsersSelect<T extends boolean = true> {
 export interface RestoredMotoSelect<T extends boolean = true> {
   name?: T;
   manufacturer?: T;
+  manufacturerLegacy?: T;
   year?: T;
   heroImage?: T;
   images?: T;
@@ -1962,6 +2001,7 @@ export interface RestoredMotoSelect<T extends boolean = true> {
 export interface CustomMotorcyclesSelect<T extends boolean = true> {
   name?: T;
   manufacturer?: T;
+  manufacturerLegacy?: T;
   year?: T;
   heroImage?: T;
   images?: T;
@@ -2036,6 +2076,18 @@ export interface ContactSubmissionsSelect<T extends boolean = true> {
   message?: T;
   status?: T;
   notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "manufacturers_select".
+ */
+export interface ManufacturersSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  generateSlug?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

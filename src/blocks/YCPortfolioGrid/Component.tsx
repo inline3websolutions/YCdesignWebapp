@@ -4,10 +4,20 @@ import { ArrowUpRight, ArrowRight } from 'lucide-react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
-import type { Page, Media, RestoredMoto, CustomMotorcycle } from '@/payload-types'
+import type { Page, Media, RestoredMoto, CustomMotorcycle, Manufacturer } from '@/payload-types'
 import { Media as MediaComponent } from '@/components/Media'
 
 type Props = Extract<Page['layout'][number], { blockType: 'ycPortfolioGrid' }>
+
+// Helper function to get manufacturer name from relationship
+function getManufacturerName(
+  manufacturer: string | number | Manufacturer | null | undefined,
+): string {
+  if (!manufacturer) return ''
+  if (typeof manufacturer === 'string') return manufacturer // backwards compatibility
+  if (typeof manufacturer === 'number') return ''
+  return manufacturer.name || ''
+}
 
 export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
   const { subtitle, title, portfolioType, limit = 3, viewAllLink } = props
@@ -108,7 +118,7 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
                     </span>
                     <span className="w-1 h-1 bg-zinc-300 dark:bg-zinc-500 rounded-full"></span>
                     <span className="text-zinc-300 dark:text-zinc-400 text-[10px] font-rubik uppercase tracking-wider">
-                      {project.manufacturer}
+                      {getManufacturerName(project.manufacturer)}
                     </span>
                   </div>
                   <h4 className="text-2xl sm:text-3xl font-syne font-bold text-white leading-tight">
@@ -187,7 +197,7 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
                     <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
                       <div className="pt-4 mt-2 border-t border-white/20 flex justify-between text-zinc-300 font-rubik text-xs uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                         <span>{project.year}</span>
-                        <span>{project.manufacturer}</span>
+                        <span>{getManufacturerName(project.manufacturer)}</span>
                       </div>
                     </div>
                   </div>

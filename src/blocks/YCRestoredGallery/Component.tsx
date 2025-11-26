@@ -5,13 +5,23 @@ import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import type { Page, RestoredMoto, Media as MediaType } from '@/payload-types'
+import type { Page, RestoredMoto, Media as MediaType, Manufacturer } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { cn } from '@/utilities/ui'
 
 gsap.registerPlugin(ScrollTrigger)
 
 type Props = Extract<Page['layout'][number], { blockType: 'ycRestoredGallery' }>
+
+// Helper function to get manufacturer name from relationship
+function getManufacturerName(
+  manufacturer: string | number | Manufacturer | null | undefined,
+): string {
+  if (!manufacturer) return ''
+  if (typeof manufacturer === 'string') return manufacturer // backwards compatibility
+  if (typeof manufacturer === 'number') return ''
+  return manufacturer.name || ''
+}
 
 export const YCRestoredGalleryBlock: React.FC<Props> = (props) => {
   const { eyebrow, title, highlight, motorcycles } = props
@@ -70,10 +80,11 @@ export const YCRestoredGalleryBlock: React.FC<Props> = (props) => {
 
           const motorcycle = moto as RestoredMoto
           const heroImage = motorcycle.heroImage as MediaType | undefined
+          const manufacturerName = getManufacturerName(motorcycle.manufacturer)
           const tag =
-            motorcycle.manufacturer && motorcycle.year
-              ? `${motorcycle.manufacturer} • ${motorcycle.year}`
-              : motorcycle.manufacturer || (motorcycle.year ? String(motorcycle.year) : undefined)
+            manufacturerName && motorcycle.year
+              ? `${manufacturerName} • ${motorcycle.year}`
+              : manufacturerName || (motorcycle.year ? String(motorcycle.year) : undefined)
 
           return (
             <Link
