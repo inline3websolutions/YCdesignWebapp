@@ -7,6 +7,9 @@ import PortfolioClient from './PortfolioClient'
 import { restoredMotoToProject, customMotoToProject } from '@/types/yc'
 import type { Project } from '@/types/yc'
 
+// Force dynamic rendering to avoid clientReferenceManifest issues during revalidation
+export const dynamic = 'force-dynamic'
+
 async function getRestoredMotos() {
   const payload = await getPayload({ config: configPromise })
 
