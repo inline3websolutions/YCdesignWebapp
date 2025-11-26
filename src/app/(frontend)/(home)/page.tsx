@@ -2,13 +2,14 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { unstable_cache } from 'next/cache'
+import { draftMode } from 'next/headers'
+import dynamic from 'next/dynamic'
 
-import HomeClient from './HomeClient'
 import { restoredMotoToProject, customMotoToProject, testimonials } from '@/types/yc'
 import type { Project } from '@/types/yc'
 
-// Force dynamic rendering to avoid clientReferenceManifest issues during revalidation
-export const dynamic = 'force-dynamic'
+// Dynamic import to avoid clientReferenceManifest issues
+const HomeClient = dynamic(() => import('./HomeClient'), { ssr: true })
 
 async function getRestoredMotos() {
   const payload = await getPayload({ config: configPromise })
@@ -53,10 +54,12 @@ const getCachedCustomMotos = unstable_cache(getCustomMotos, ['custom-motos'], {
 })
 
 export default async function HomePage() {
-  const [restoredMotos, customMotos] = await Promise.all([
-    getCachedRestoredMotos(),
-    getCachedCustomMotos(),
-  ])
+  const { isEnabled: isDraftMode } = await draftMode()
+
+  // Use direct fetch in draft mode, cached otherwise
+  const [restoredMotos, customMotos] = isDraftMode
+    ? await Promise.all([getRestoredMotos(), getCustomMotos()])
+    : await Promise.all([getCachedRestoredMotos(), getCachedCustomMotos()])
 
   // Convert Payload data to Project format
   const restorationProjects: Project[] = restoredMotos.map(restoredMotoToProject)
