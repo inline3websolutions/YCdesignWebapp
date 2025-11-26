@@ -44,7 +44,10 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
   return doc
 }
 
-export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({ doc, req: { payload, context } }) => {
+export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({
+  doc,
+  req: { payload, context },
+}) => {
   if (!context.disableRevalidate) {
     const path = `/posts/${doc?.slug}`
 

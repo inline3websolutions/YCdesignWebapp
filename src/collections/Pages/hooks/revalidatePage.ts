@@ -44,7 +44,10 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
   return doc
 }
 
-export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { payload, context } }) => {
+export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({
+  doc,
+  req: { payload, context },
+}) => {
   if (!context.disableRevalidate) {
     const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`
     safeRevalidatePath(path, payload.logger)

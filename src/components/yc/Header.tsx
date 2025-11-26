@@ -4,9 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import gsap from 'gsap'
-import { Search } from 'lucide-react'
 import { Logo } from '@/components/yc'
-import GlobalSearch from './GlobalSearch'
 import type { Header } from '@/payload-types'
 
 interface YCHeaderProps {
@@ -15,7 +13,6 @@ interface YCHeaderProps {
 
 const YCHeader: React.FC<YCHeaderProps> = ({ data }) => {
   const [scrolled, setScrolled] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
   const pathname = usePathname()
   const navRef = useRef<HTMLElement>(null)
 
@@ -25,15 +22,6 @@ const YCHeader: React.FC<YCHeaderProps> = ({ data }) => {
       setScrolled(window.scrollY > 20)
     }
     window.addEventListener('scroll', handleScroll)
-
-    // Keyboard shortcut for search (Cmd+K or Ctrl+K)
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setSearchOpen(true)
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown)
 
     // Initial enter animation
     if (navRef.current) {
@@ -46,7 +34,6 @@ const YCHeader: React.FC<YCHeaderProps> = ({ data }) => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      document.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
 
@@ -175,15 +162,6 @@ const YCHeader: React.FC<YCHeaderProps> = ({ data }) => {
 
         {/* CTA */}
         <div className="flex items-center gap-2 md:gap-3 shrink-0 z-20">
-          {/* Search Button */}
-          <button
-            onClick={() => setSearchOpen(true)}
-            className="p-2 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900/50 hover:border-yc-yellow/50 text-zinc-500 hover:text-zinc-900 dark:hover:text-yc-yellow transition-colors duration-300"
-            aria-label="Search"
-          >
-            <Search size={16} />
-          </button>
-
           <Link
             href={ctaButton.url || '/#contact'}
             onClick={(e) => handleNavClick(e, ctaButton.url || '/#contact')}
@@ -196,9 +174,6 @@ const YCHeader: React.FC<YCHeaderProps> = ({ data }) => {
           </Link>
         </div>
       </div>
-
-      {/* Global Search Modal */}
-      <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </nav>
   )
 }
