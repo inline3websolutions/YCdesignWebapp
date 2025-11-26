@@ -55,12 +55,12 @@ export const YCAboutBlock: React.FC<Props> = (props) => {
               <RichText data={body} enableGutter={false} />
             </div>
           )}
-          {primaryLink && primaryLink.links && primaryLink.links.length > 0 && (
+          {primaryLink && primaryLink.length > 0 && (
             <CMSLink
               className="inline-block border border-white/30 px-8 py-4 rounded-full hover:bg-yc-yellow hover:text-black hover:border-yc-yellow transition-all duration-300 uppercase text-sm tracking-widest"
-              {...primaryLink.links[0].link}
+              {...primaryLink[0].link}
             >
-              {primaryLink.links[0].link.label}
+              {primaryLink[0].link.label}
             </CMSLink>
           )}
         </div>
