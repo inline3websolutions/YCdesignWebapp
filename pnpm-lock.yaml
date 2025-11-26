@@ -14,6 +14,9 @@ importers:
       '@payloadcms/db-mongodb':
         specifier: 3.65.0
         version: 3.65.0(payload@3.65.0(graphql@16.12.0)(typescript@5.7.3))
+      '@payloadcms/live-preview':
+        specifier: ^3.65.0
+        version: 3.65.0
       '@payloadcms/live-preview-react':
         specifier: 3.62.1
         version: 3.62.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1273,6 +1276,9 @@ packages:
 
   '@payloadcms/live-preview@3.62.1':
     resolution: {integrity: sha512-YQ/g7RfU5uK/AWH7ijT6tvKRoQris5a1wc3utih+o9lK5/yRxwecZ/UPZygW9a+I7r1Id4u0y6bRIoaw+kCswQ==}
+
+  '@payloadcms/live-preview@3.65.0':
+    resolution: {integrity: sha512-+sw1u6p3rv7l2V/kxJw3dfw4j68o1WBBaXFshu5OdiNjvvb2UAkgenVYumcM7vDTUCoEi2sTEfZdJzU8oOkSrQ==}
 
   '@payloadcms/next@3.65.0':
     resolution: {integrity: sha512-xzrzN1+gIEOYJDgK13N7R95ImK9x0YpqJPutORwtSSBeYA+Fl0k6N62yVj8nfNrQvAnJdmlWqmMZKyQosKIQTg==}
@@ -6438,6 +6444,8 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
 
   '@payloadcms/live-preview@3.62.1': {}
+
+  '@payloadcms/live-preview@3.65.0': {}
 
   '@payloadcms/next@3.65.0(@types/react@19.1.8)(graphql@16.12.0)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.65.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)':
     dependencies:
