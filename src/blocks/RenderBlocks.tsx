@@ -12,6 +12,10 @@ import { YCAboutBlock } from '@/blocks/YCAbout/Component'
 import { YCServicesBlock } from '@/blocks/YCServices/Component'
 import { YCRestoredGalleryBlock } from '@/blocks/YCRestoredGallery/Component'
 import { YCCustomFeatureBlock } from '@/blocks/YCCustomFeature/Component'
+import { YCHeroBlock } from '@/blocks/YCHero/Component'
+import { YCPortfolioGridBlock } from '@/blocks/YCPortfolioGrid/Component'
+import { YCTestimonialsBlock } from '@/blocks/YCTestimonials/Component'
+import { YCContactBlock } from '@/blocks/YCContact/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -24,6 +28,10 @@ const blockComponents = {
   ycServices: YCServicesBlock,
   ycRestoredGallery: YCRestoredGalleryBlock,
   ycCustomFeature: YCCustomFeatureBlock,
+  ycHero: YCHeroBlock,
+  ycPortfolioGrid: YCPortfolioGridBlock,
+  ycTestimonials: YCTestimonialsBlock,
+  ycContact: YCContactBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -44,10 +52,8 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               return (
-                <div className="my-16" key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer />
-                </div>
+                // @ts-expect-error there may be some mismatch between the expected types here
+                <Block {...block} key={index} disableInnerContainer />
               )
             }
           }

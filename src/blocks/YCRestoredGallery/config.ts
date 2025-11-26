@@ -23,32 +23,16 @@ export const YCRestoredGallery: Block = {
       label: 'Highlighted Word (optional)',
     },
     {
-      name: 'cards',
-      type: 'array',
-      minRows: 1,
+      name: 'motorcycles',
+      type: 'relationship',
+      relationTo: 'restored-moto',
+      hasMany: true,
       required: true,
-      labels: {
-        singular: 'Card',
-        plural: 'Cards',
+      minRows: 1,
+      label: 'Select Motorcycles',
+      admin: {
+        description: 'Select which restored motorcycles to display in the gallery grid',
       },
-      fields: [
-        {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-        },
-        {
-          name: 'title',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'tag',
-          type: 'text',
-          label: 'Tag / Meta',
-        },
-      ],
     },
   ],
 }

@@ -61,7 +61,7 @@ const YCHeader: React.FC = () => {
   const navLinks = [
     { name: 'Studio', mobileName: 'Studio', path: '/#about' },
     { name: 'Work', mobileName: 'Work', path: '/portfolio' },
-    { name: 'Inventory', mobileName: 'Shop', path: '/sales' },
+    { name: 'On Sale', mobileName: 'Sale', path: '/sales' },
     { name: 'Blog', mobileName: 'Blog', path: '/blog' },
   ]
 

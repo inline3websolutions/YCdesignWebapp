@@ -12,6 +12,10 @@ import { YCAbout } from '@/blocks/YCAbout/config'
 import { YCServices } from '@/blocks/YCServices/config'
 import { YCRestoredGallery } from '@/blocks/YCRestoredGallery/config'
 import { YCCustomFeature } from '@/blocks/YCCustomFeature/config'
+import { YCHero } from '@/blocks/YCHero/config'
+import { YCPortfolioGrid } from '@/blocks/YCPortfolioGrid/config'
+import { YCTestimonials } from '@/blocks/YCTestimonials/config'
+import { YCContact } from '@/blocks/YCContact/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -88,6 +92,10 @@ export const Pages: CollectionConfig<'pages'> = {
                 YCServices,
                 YCRestoredGallery,
                 YCCustomFeature,
+                YCHero,
+                YCPortfolioGrid,
+                YCTestimonials,
+                YCContact,
               ],
               required: true,
               admin: {

@@ -12,23 +12,28 @@ export const YCAbout: Block = {
     {
       name: 'eyebrow',
       type: 'text',
-      label: 'Eyebrow (optional)',
+      label: 'Eyebrow (e.g. "The Workshop")',
+      defaultValue: 'The Workshop',
     },
     {
       name: 'heading',
       type: 'text',
       required: true,
+      defaultValue: 'ENGINEERING',
+      label: 'Heading (first line)',
     },
     {
       name: 'highlight',
       type: 'text',
       required: false,
-      label: 'Highlighted Word',
+      label: 'Subheading (second line, muted color)',
+      defaultValue: 'SOUL & SPEED.',
     },
     {
       name: 'body',
       type: 'richText',
       required: true,
+      label: 'Description',
     },
     linkGroup({
       overrides: {
@@ -42,11 +47,39 @@ export const YCAbout: Block = {
       type: 'upload',
       relationTo: 'media',
       required: true,
+      label: 'Main Image',
     },
     {
-      name: 'label',
+      name: 'cornerLabel',
       type: 'text',
-      label: 'Corner Label (e.g. 01)',
+      label: 'Corner Badge (e.g. "YC")',
+      defaultValue: 'YC',
+    },
+    {
+      name: 'stats',
+      type: 'array',
+      label: 'Statistics',
+      maxRows: 2,
+      fields: [
+        {
+          name: 'value',
+          type: 'number',
+          required: true,
+          label: 'Number Value',
+        },
+        {
+          name: 'suffix',
+          type: 'text',
+          label: 'Suffix (e.g. "+", "%")',
+          defaultValue: '+',
+        },
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          label: 'Label',
+        },
+      ],
     },
   ],
 }

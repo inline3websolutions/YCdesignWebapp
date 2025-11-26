@@ -272,7 +272,15 @@ export interface Page {
             }[]
           | null;
         image: string | Media;
-        label?: string | null;
+        cornerLabel?: string | null;
+        stats?:
+          | {
+              value: number;
+              suffix?: string | null;
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'ycAbout';
@@ -293,12 +301,10 @@ export interface Page {
         eyebrow?: string | null;
         title: string;
         highlight?: string | null;
-        cards: {
-          image: string | Media;
-          title: string;
-          tag?: string | null;
-          id?: string | null;
-        }[];
+        /**
+         * Select which restored motorcycles to display in the gallery grid
+         */
+        motorcycles: (string | RestoredMoto)[];
         id?: string | null;
         blockName?: string | null;
         blockType: 'ycRestoredGallery';
@@ -344,6 +350,57 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'ycCustomFeature';
+      }
+    | {
+        headline: string;
+        location?: string | null;
+        tagline?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycHero';
+      }
+    | {
+        subtitle?: string | null;
+        title: string;
+        /**
+         * Select which collection to display
+         */
+        portfolioType: 'restored' | 'custom';
+        /**
+         * How many projects to display (1-12)
+         */
+        limit?: number | null;
+        /**
+         * URL for the "View All" button
+         */
+        viewAllLink?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycPortfolioGrid';
+      }
+    | {
+        eyebrow?: string | null;
+        title: string;
+        testimonials: {
+          text: string;
+          name: string;
+          role?: string | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycTestimonials';
+      }
+    | {
+        heading: string;
+        subheading?: string | null;
+        /**
+         * Full WhatsApp URL (e.g., https://wa.me/919876543210)
+         */
+        whatsappLink?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycContact';
       }
   )[];
   meta?: {
@@ -1474,7 +1531,15 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               image?: T;
-              label?: T;
+              cornerLabel?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    suffix?: T;
+                    label?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1499,14 +1564,7 @@ export interface PagesSelect<T extends boolean = true> {
               eyebrow?: T;
               title?: T;
               highlight?: T;
-              cards?:
-                | T
-                | {
-                    image?: T;
-                    title?: T;
-                    tag?: T;
-                    id?: T;
-                  };
+              motorcycles?: T;
               id?: T;
               blockName?: T;
             };
@@ -1547,6 +1605,51 @@ export interface PagesSelect<T extends boolean = true> {
                           id?: T;
                         };
                   };
+              id?: T;
+              blockName?: T;
+            };
+        ycHero?:
+          | T
+          | {
+              headline?: T;
+              location?: T;
+              tagline?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ycPortfolioGrid?:
+          | T
+          | {
+              subtitle?: T;
+              title?: T;
+              portfolioType?: T;
+              limit?: T;
+              viewAllLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ycTestimonials?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              testimonials?:
+                | T
+                | {
+                    text?: T;
+                    name?: T;
+                    role?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        ycContact?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              whatsappLink?: T;
               id?: T;
               blockName?: T;
             };
