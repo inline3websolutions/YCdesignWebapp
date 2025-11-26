@@ -38,6 +38,10 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  // Ensure clean builds on each deployment
+  generateBuildId: async () => {
+    return `build-${Date.now()}`
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

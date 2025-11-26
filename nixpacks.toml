@@ -1,0 +1,12 @@
+# Nixpacks configuration for Railway
+# Disable caching of the .next directory to prevent clientReferenceManifest issues
+
+[phases.build]
+cmds = ["pnpm run build"]
+
+# Don't cache .next folder as it can cause deployment issues
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[start]
+cmd = "pnpm run start"
