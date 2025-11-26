@@ -2,16 +2,52 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Instagram, Mail, MapPin, Phone, Sun, Moon } from 'lucide-react'
+import { Instagram, Mail, MapPin, Phone, Sun, Moon, Facebook, Youtube } from 'lucide-react'
 import { Logo } from '@/components/yc'
 import { useTheme } from '@/providers/Theme'
+import type { Footer } from '@/payload-types'
 
-const YCFooter: React.FC = () => {
+interface YCFooterProps {
+  data?: Footer
+}
+
+const YCFooter: React.FC<YCFooterProps> = ({ data }) => {
   const { theme, setTheme } = useTheme()
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
+
+  // Default values
+  const description =
+    data?.description ||
+    'Preserving Legends. Building Icons. We specialize in bringing vintage mechanical souls back to life with modern precision and retro-futuristic aesthetics.'
+
+  const socialLinks = data?.socialLinks || {}
+
+  const defaultExploreLinks = [
+    { label: 'Home', url: '/' },
+    { label: 'Restored Bikes', url: '/portfolio?filter=Restoration' },
+    { label: 'Modified Bikes', url: '/portfolio?filter=Modification' },
+    { label: 'Inventory', url: '/sales' },
+    { label: 'About Us', url: '/#about' },
+    { label: 'Contact', url: '/#contact' },
+  ]
+
+  const exploreLinks = data?.exploreLinks?.length ? data.exploreLinks : defaultExploreLinks
+
+  const contactInfo = data?.contactInfo || {
+    addressLine1: 'Lower Parel, Mumbai,',
+    addressLine2: 'Maharashtra, India',
+    phone: '+91 98765 43210',
+  }
+
+  const legalLinks = data?.legalLinks || {
+    privacyPolicy: '/privacy',
+    termsOfService: '/terms',
+  }
+
+  const copyrightText = data?.copyrightText || 'YC Design. All rights reserved.'
 
   return (
     <footer className="bg-zinc-100 dark:bg-yc-dark border-t border-zinc-200 dark:border-zinc-800 pt-20 pb-10 relative overflow-hidden transition-colors duration-500">
@@ -23,22 +59,67 @@ const YCFooter: React.FC = () => {
               <Logo className="h-12 w-auto text-zinc-900 dark:text-white transition-colors duration-500" />
             </div>
             <p className="text-zinc-600 dark:text-zinc-400 font-rubik max-w-md leading-relaxed mb-8 transition-colors duration-500">
-              Preserving Legends. Building Icons. We specialize in bringing vintage mechanical souls
-              back to life with modern precision and retro-futuristic aesthetics.
+              {description}
             </p>
             <div className="flex space-x-4">
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:border-yc-yellow hover:text-yc-yellow transition-all"
-              >
-                <Instagram size={18} />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:border-yc-yellow hover:text-yc-yellow transition-all"
-              >
-                <Mail size={18} />
-              </a>
+              {socialLinks.instagram && (
+                <a
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:border-yc-yellow hover:text-yc-yellow transition-all"
+                >
+                  <Instagram size={18} />
+                </a>
+              )}
+              {socialLinks.email && (
+                <a
+                  href={`mailto:${socialLinks.email}`}
+                  className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:border-yc-yellow hover:text-yc-yellow transition-all"
+                >
+                  <Mail size={18} />
+                </a>
+              )}
+              {socialLinks.facebook && (
+                <a
+                  href={socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:border-yc-yellow hover:text-yc-yellow transition-all"
+                >
+                  <Facebook size={18} />
+                </a>
+              )}
+              {socialLinks.youtube && (
+                <a
+                  href={socialLinks.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:border-yc-yellow hover:text-yc-yellow transition-all"
+                >
+                  <Youtube size={18} />
+                </a>
+              )}
+              {/* Show default icons if no social links are set */}
+              {!socialLinks.instagram &&
+                !socialLinks.email &&
+                !socialLinks.facebook &&
+                !socialLinks.youtube && (
+                  <>
+                    <a
+                      href="#"
+                      className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:border-yc-yellow hover:text-yc-yellow transition-all"
+                    >
+                      <Instagram size={18} />
+                    </a>
+                    <a
+                      href="#"
+                      className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:border-yc-yellow hover:text-yc-yellow transition-all"
+                    >
+                      <Mail size={18} />
+                    </a>
+                  </>
+                )}
             </div>
           </div>
 
@@ -47,17 +128,10 @@ const YCFooter: React.FC = () => {
               Explore
             </h3>
             <ul className="space-y-4">
-              {[
-                { label: 'Home', href: '/' },
-                { label: 'Restored Bikes', href: '/portfolio?filter=Restoration' },
-                { label: 'Modified Bikes', href: '/portfolio?filter=Modification' },
-                { label: 'Inventory', href: '/sales' },
-                { label: 'About Us', href: '/#about' },
-                { label: 'Contact', href: '/#contact' },
-              ].map((item) => (
-                <li key={item.label}>
+              {exploreLinks.map((item, index) => (
+                <li key={item.url || index}>
                   <Link
-                    href={item.href}
+                    href={item.url || '#'}
                     className="text-zinc-500 hover:text-yc-yellow transition-colors font-rubik text-sm"
                   >
                     {item.label}
@@ -75,21 +149,23 @@ const YCFooter: React.FC = () => {
               <li className="flex items-start space-x-3 text-zinc-500 font-rubik text-sm">
                 <MapPin size={18} className="text-yc-yellow shrink-0 mt-1" />
                 <span>
-                  Lower Parel, Mumbai,
+                  {contactInfo.addressLine1}
                   <br />
-                  Maharashtra, India
+                  {contactInfo.addressLine2}
                 </span>
               </li>
               <li className="flex items-center space-x-3 text-zinc-500 font-rubik text-sm">
                 <Phone size={18} className="text-yc-yellow shrink-0" />
-                <span>+91 98765 43210</span>
+                <span>{contactInfo.phone}</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-zinc-200 dark:border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-500 dark:text-zinc-600 font-rubik transition-colors duration-500">
-          <p>&copy; {new Date().getFullYear()} YC Design. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} {copyrightText}
+          </p>
 
           <div className="flex items-center gap-6 mt-4 md:mt-0">
             {/* Theme Toggle */}
@@ -105,12 +181,12 @@ const YCFooter: React.FC = () => {
             </button>
 
             <div className="flex space-x-6">
-              <a href="#" className="hover:text-zinc-400">
+              <Link href={legalLinks.privacyPolicy || '/privacy'} className="hover:text-zinc-400">
                 Privacy Policy
-              </a>
-              <a href="#" className="hover:text-zinc-400">
+              </Link>
+              <Link href={legalLinks.termsOfService || '/terms'} className="hover:text-zinc-400">
                 Terms of Service
-              </a>
+              </Link>
             </div>
           </div>
         </div>

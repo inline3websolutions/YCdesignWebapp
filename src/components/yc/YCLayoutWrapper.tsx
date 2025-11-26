@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from 'react'
 import { Loader as YCLoader, YCHeader, YCFooter } from '@/components/yc'
+import type { Header, Footer } from '@/payload-types'
 
 interface YCLayoutWrapperProps {
   children: React.ReactNode
+  headerData?: Header
+  footerData?: Footer
 }
 
-const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({ children }) => {
+const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({ children, headerData, footerData }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [hasLoaded, setHasLoaded] = useState(false)
 
@@ -33,9 +36,9 @@ const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({ children }) => {
 
   return (
     <>
-      <YCHeader />
+      <YCHeader data={headerData} />
       <main className="min-h-screen">{children}</main>
-      <YCFooter />
+      <YCFooter data={footerData} />
     </>
   )
 }

@@ -2321,24 +2321,39 @@ export interface Header {
   id: string;
   navItems?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        /**
+         * Display name for desktop view
+         */
+        label: string;
+        /**
+         * Shorter label for mobile view (optional - uses Label if not set)
+         */
+        mobileLabel?: string | null;
+        linkType?: ('reference' | 'custom') | null;
+        reference?:
+          | ({
+              relationTo: 'pages';
+              value: string | Page;
+            } | null)
+          | ({
+              relationTo: 'posts';
+              value: string | Post;
+            } | null);
+        /**
+         * e.g., /portfolio, /#about, /sales
+         */
+        url?: string | null;
         id?: string | null;
       }[]
     | null;
+  ctaButton?: {
+    label?: string | null;
+    /**
+     * Shorter label for mobile view
+     */
+    mobileLabel?: string | null;
+    url?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2348,26 +2363,39 @@ export interface Header {
  */
 export interface Footer {
   id: string;
-  navItems?:
+  /**
+   * Short description text shown below the logo
+   */
+  description?: string | null;
+  socialLinks?: {
+    instagram?: string | null;
+    email?: string | null;
+    facebook?: string | null;
+    youtube?: string | null;
+  };
+  exploreLinks?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        label: string;
+        /**
+         * e.g., /portfolio, /#about, /sales
+         */
+        url: string;
         id?: string | null;
       }[]
     | null;
+  contactInfo?: {
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    phone?: string | null;
+  };
+  legalLinks?: {
+    privacyPolicy?: string | null;
+    termsOfService?: string | null;
+  };
+  /**
+   * Year will be automatically prepended
+   */
+  copyrightText?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2379,16 +2407,19 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
+        label?: T;
+        mobileLabel?: T;
+        linkType?: T;
+        reference?: T;
+        url?: T;
         id?: T;
+      };
+  ctaButton?:
+    | T
+    | {
+        label?: T;
+        mobileLabel?: T;
+        url?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2399,20 +2430,36 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  description?: T;
+  socialLinks?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
+        instagram?: T;
+        email?: T;
+        facebook?: T;
+        youtube?: T;
+      };
+  exploreLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
         id?: T;
       };
+  contactInfo?:
+    | T
+    | {
+        addressLine1?: T;
+        addressLine2?: T;
+        phone?: T;
+      };
+  legalLinks?:
+    | T
+    | {
+        privacyPolicy?: T;
+        termsOfService?: T;
+      };
+  copyrightText?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

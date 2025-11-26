@@ -4,6 +4,18 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Page } from '../../../payload-types'
 
+/**
+ * Safely revalidate a path, catching any errors from Next.js internal issues
+ * (e.g., clientReferenceManifest errors during on-demand revalidation)
+ */
+function safeRevalidatePath(path: string, logger: { info: (msg: string) => void }) {
+  try {
+    revalidatePath(path)
+  } catch (error) {
+    logger.info(`Warning: Could not revalidate path ${path}: ${error}`)
+  }
+}
+
 export const revalidatePage: CollectionAfterChangeHook<Page> = ({
   doc,
   previousDoc,
@@ -15,7 +27,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       payload.logger.info(`Revalidating page at path: ${path}`)
 
-      revalidatePath(path)
+      safeRevalidatePath(path, payload.logger)
       revalidateTag('pages-sitemap')
     }
 
@@ -25,17 +37,17 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       payload.logger.info(`Revalidating old page at path: ${oldPath}`)
 
-      revalidatePath(oldPath)
+      safeRevalidatePath(oldPath, payload.logger)
       revalidateTag('pages-sitemap')
     }
   }
   return doc
 }
 
-export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { context } }) => {
+export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { payload, context } }) => {
   if (!context.disableRevalidate) {
     const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`
-    revalidatePath(path)
+    safeRevalidatePath(path, payload.logger)
     revalidateTag('pages-sitemap')
   }
 

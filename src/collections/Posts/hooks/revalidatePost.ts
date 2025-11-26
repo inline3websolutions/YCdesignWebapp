@@ -4,6 +4,18 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Post } from '../../../payload-types'
 
+/**
+ * Safely revalidate a path, catching any errors from Next.js internal issues
+ * (e.g., clientReferenceManifest errors during on-demand revalidation)
+ */
+function safeRevalidatePath(path: string, logger: { info: (msg: string) => void }) {
+  try {
+    revalidatePath(path)
+  } catch (error) {
+    logger.info(`Warning: Could not revalidate path ${path}: ${error}`)
+  }
+}
+
 export const revalidatePost: CollectionAfterChangeHook<Post> = ({
   doc,
   previousDoc,
@@ -15,7 +27,7 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
 
       payload.logger.info(`Revalidating post at path: ${path}`)
 
-      revalidatePath(path)
+      safeRevalidatePath(path, payload.logger)
       revalidateTag('posts-sitemap')
     }
 
@@ -25,18 +37,18 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
 
       payload.logger.info(`Revalidating old post at path: ${oldPath}`)
 
-      revalidatePath(oldPath)
+      safeRevalidatePath(oldPath, payload.logger)
       revalidateTag('posts-sitemap')
     }
   }
   return doc
 }
 
-export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({ doc, req: { context } }) => {
+export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({ doc, req: { payload, context } }) => {
   if (!context.disableRevalidate) {
     const path = `/posts/${doc?.slug}`
 
-    revalidatePath(path)
+    safeRevalidatePath(path, payload.logger)
     revalidateTag('posts-sitemap')
   }
 

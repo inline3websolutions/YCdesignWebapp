@@ -13,8 +13,18 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
 
   return (
     <nav className="flex gap-3 items-center">
-      {navItems.map(({ link }, i) => {
-        return <CMSLink key={i} {...link} appearance="link" />
+      {navItems.map((item, i) => {
+        // Map the header schema to CMSLink expected props
+        return (
+          <CMSLink
+            key={i}
+            type={item.linkType === 'reference' ? 'reference' : 'custom'}
+            label={item.label}
+            url={item.url}
+            reference={item.reference}
+            appearance="link"
+          />
+        )
       })}
       <Link href="/search">
         <span className="sr-only">Search</span>

@@ -4,6 +4,18 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { RestoredMoto } from '../../../payload-types'
 
+/**
+ * Safely revalidate a path, catching any errors from Next.js internal issues
+ * (e.g., clientReferenceManifest errors during on-demand revalidation)
+ */
+function safeRevalidatePath(path: string, logger: { info: (msg: string) => void }) {
+  try {
+    revalidatePath(path)
+  } catch (error) {
+    logger.info(`Warning: Could not revalidate path ${path}: ${error}`)
+  }
+}
+
 export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
   doc,
   previousDoc,
@@ -15,8 +27,10 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
 
       payload.logger.info(`Revalidating moto at path: ${path}`)
 
-      revalidatePath(path)
+      safeRevalidatePath(path, payload.logger)
       revalidateTag('moto-sitemap')
+      // Also revalidate the home page cache tag since it displays restored motos
+      revalidateTag('restored-moto')
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
@@ -24,8 +38,9 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
 
       payload.logger.info(`Revalidating old moto at path: ${oldPath}`)
 
-      revalidatePath(oldPath)
+      safeRevalidatePath(oldPath, payload.logger)
       revalidateTag('moto-sitemap')
+      revalidateTag('restored-moto')
     }
   }
   return doc
@@ -33,13 +48,14 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
 
 export const revalidateDelete: CollectionAfterDeleteHook<RestoredMoto> = ({
   doc,
-  req: { context },
+  req: { payload, context },
 }) => {
   if (!context.disableRevalidate) {
     const path = `/restored-moto/${doc?.slug}`
 
-    revalidatePath(path)
+    safeRevalidatePath(path, payload.logger)
     revalidateTag('moto-sitemap')
+    revalidateTag('restored-moto')
   }
 
   return doc

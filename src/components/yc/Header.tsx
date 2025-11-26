@@ -7,8 +7,13 @@ import gsap from 'gsap'
 import { Search } from 'lucide-react'
 import { Logo } from '@/components/yc'
 import GlobalSearch from './GlobalSearch'
+import type { Header } from '@/payload-types'
 
-const YCHeader: React.FC = () => {
+interface YCHeaderProps {
+  data?: Header
+}
+
+const YCHeader: React.FC<YCHeaderProps> = ({ data }) => {
   const [scrolled, setScrolled] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const pathname = usePathname()
@@ -58,12 +63,32 @@ const YCHeader: React.FC = () => {
     }
   }, [pathname])
 
-  const navLinks = [
-    { name: 'Studio', mobileName: 'Studio', path: '/#about' },
-    { name: 'Work', mobileName: 'Work', path: '/portfolio' },
-    { name: 'On Sale', mobileName: 'Sale', path: '/sales' },
-    { name: 'Blog', mobileName: 'Blog', path: '/blog' },
+  // Default nav links if no data from Payload
+  const defaultNavLinks = [
+    { label: 'Studio', mobileLabel: 'Studio', url: '/#about' },
+    { label: 'Work', mobileLabel: 'Work', url: '/portfolio' },
+    { label: 'On Sale', mobileLabel: 'Sale', url: '/sales' },
+    { label: 'Blog', mobileLabel: 'Blog', url: '/blog' },
   ]
+
+  // Use Payload data or fallback to defaults
+  const navLinks =
+    data?.navItems?.map((item) => ({
+      label: item.label,
+      mobileLabel: item.mobileLabel || item.label,
+      url:
+        item.linkType === 'reference' && item.reference
+          ? typeof item.reference.value === 'object'
+            ? `/${item.reference.value.slug}`
+            : `/${item.reference.value}`
+          : item.url || '#',
+    })) || defaultNavLinks
+
+  const ctaButton = data?.ctaButton || {
+    label: 'Start Project',
+    mobileLabel: 'Start',
+    url: '/#contact',
+  }
 
   const isActive = (path: string) => {
     if (path === '/portfolio' && pathname?.includes('portfolio')) return true
@@ -119,20 +144,20 @@ const YCHeader: React.FC = () => {
         {/* Unified Navigation - Clean Island (Mobile & Desktop) */}
         <div className="flex items-center justify-center gap-0 md:gap-1 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => {
-            const active = isActive(link.path)
+            const active = isActive(link.url)
             return (
               <Link
-                key={link.name}
-                href={link.path}
-                onClick={(e) => handleNavClick(e, link.path)}
+                key={link.label}
+                href={link.url}
+                onClick={(e) => handleNavClick(e, link.url)}
                 className={`
                                 relative px-3 md:px-6 py-2 transition-colors duration-300 group
                                 ${active ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'}
                             `}
               >
                 <span className="relative z-10 font-rubik uppercase tracking-widest font-bold text-[10px] md:text-xs">
-                  <span className="md:hidden">{link.mobileName}</span>
-                  <span className="hidden md:inline">{link.name}</span>
+                  <span className="md:hidden">{link.mobileLabel}</span>
+                  <span className="hidden md:inline">{link.label}</span>
                 </span>
 
                 {/* Modern Dot Indicator for Active State */}
@@ -160,13 +185,13 @@ const YCHeader: React.FC = () => {
           </button>
 
           <Link
-            href="/#contact"
-            onClick={(e) => handleNavClick(e, '/#contact')}
+            href={ctaButton.url || '/#contact'}
+            onClick={(e) => handleNavClick(e, ctaButton.url || '/#contact')}
             className="relative group overflow-hidden px-4 md:px-5 py-2 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900/50 hover:border-yc-yellow/50 transition-colors duration-300"
           >
             <span className="relative text-[10px] font-syne font-bold uppercase tracking-widest text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-yc-yellow transition-colors duration-300">
-              <span className="md:hidden">Start</span>
-              <span className="hidden md:inline">Start Project</span>
+              <span className="md:hidden">{ctaButton.mobileLabel || 'Start'}</span>
+              <span className="hidden md:inline">{ctaButton.label || 'Start Project'}</span>
             </span>
           </Link>
         </div>
