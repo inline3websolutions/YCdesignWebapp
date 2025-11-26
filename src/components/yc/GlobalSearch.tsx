@@ -49,7 +49,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) => {
   }, [isOpen, onClose])
 
   // Debounced search
-  const searchDebounceRef = useRef<NodeJS.Timeout>()
+  const searchDebounceRef = useRef<NodeJS.Timeout>(null)
 
   const performSearch = useCallback(async (searchQuery: string) => {
     if (searchQuery.length < 2) {
