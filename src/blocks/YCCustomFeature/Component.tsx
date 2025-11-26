@@ -66,18 +66,18 @@ export const YCCustomFeatureBlock: React.FC<Props> = (props) => {
               </div>
             )}
 
-          {ctaTile && (ctaTile.title || (ctaTile.link && ctaTile.link.links?.length)) && (
+          {ctaTile && (ctaTile.title || (ctaTile.link && ctaTile.link.length)) && (
             <div className="relative overflow-hidden bg-yc-yellow p-8 flex flex-col justify-center h-full rounded-lg hover:bg-white transition-colors duration-500">
               {ctaTile.title && (
                 <h3 className="text-2xl md:text-3xl font-display text-black font-bold leading-tight mb-4">
                   {ctaTile.title}
                 </h3>
               )}
-              {ctaTile.link && ctaTile.link.links && ctaTile.link.links.length > 0 && (
+              {ctaTile.link && ctaTile.link.length > 0 && (
                 <CMSLink
                   appearance="inline"
                   className="text-black underline underline-offset-4 font-bold uppercase text-xs tracking-[0.2em]"
-                  {...ctaTile.link.links[0].link}
+                  {...ctaTile.link[0].link}
                 />
               )}
             </div>
