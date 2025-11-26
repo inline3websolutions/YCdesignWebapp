@@ -16,6 +16,17 @@ function safeRevalidatePath(path: string, logger: { info: (msg: string) => void 
   }
 }
 
+/**
+ * Safely revalidate a tag, catching any errors from Next.js internal issues
+ */
+function safeRevalidateTag(tag: string, logger: { info: (msg: string) => void }) {
+  try {
+    revalidateTag(tag)
+  } catch (error) {
+    logger.info(`Warning: Could not revalidate tag ${tag}: ${error}`)
+  }
+}
+
 export const revalidateCustomMoto: CollectionAfterChangeHook<CustomMotorcycle> = ({
   doc,
   previousDoc,
@@ -28,9 +39,9 @@ export const revalidateCustomMoto: CollectionAfterChangeHook<CustomMotorcycle> =
       payload.logger.info(`Revalidating custom motorcycle at path: ${path}`)
 
       safeRevalidatePath(path, payload.logger)
-      revalidateTag('custom-moto-sitemap')
+      safeRevalidateTag('custom-moto-sitemap', payload.logger)
       // Also revalidate the home page cache tag since it displays custom motorcycles
-      revalidateTag('custom-motorcycles')
+      safeRevalidateTag('custom-motorcycles', payload.logger)
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
@@ -39,8 +50,8 @@ export const revalidateCustomMoto: CollectionAfterChangeHook<CustomMotorcycle> =
       payload.logger.info(`Revalidating old custom motorcycle at path: ${oldPath}`)
 
       safeRevalidatePath(oldPath, payload.logger)
-      revalidateTag('custom-moto-sitemap')
-      revalidateTag('custom-motorcycles')
+      safeRevalidateTag('custom-moto-sitemap', payload.logger)
+      safeRevalidateTag('custom-motorcycles', payload.logger)
     }
   }
   return doc
@@ -54,8 +65,8 @@ export const revalidateDelete: CollectionAfterDeleteHook<CustomMotorcycle> = ({
     const path = `/custom-motorcycles/${doc?.slug}`
 
     safeRevalidatePath(path, payload.logger)
-    revalidateTag('custom-moto-sitemap')
-    revalidateTag('custom-motorcycles')
+    safeRevalidateTag('custom-moto-sitemap', payload.logger)
+    safeRevalidateTag('custom-motorcycles', payload.logger)
   }
 
   return doc

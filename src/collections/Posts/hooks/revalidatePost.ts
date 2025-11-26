@@ -16,6 +16,17 @@ function safeRevalidatePath(path: string, logger: { info: (msg: string) => void 
   }
 }
 
+/**
+ * Safely revalidate a tag, catching any errors from Next.js internal issues
+ */
+function safeRevalidateTag(tag: string, logger: { info: (msg: string) => void }) {
+  try {
+    revalidateTag(tag)
+  } catch (error) {
+    logger.info(`Warning: Could not revalidate tag ${tag}: ${error}`)
+  }
+}
+
 export const revalidatePost: CollectionAfterChangeHook<Post> = ({
   doc,
   previousDoc,
@@ -28,7 +39,7 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
       payload.logger.info(`Revalidating post at path: ${path}`)
 
       safeRevalidatePath(path, payload.logger)
-      revalidateTag('posts-sitemap')
+      safeRevalidateTag('posts-sitemap', payload.logger)
     }
 
     // If the post was previously published, we need to revalidate the old path
@@ -38,7 +49,7 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
       payload.logger.info(`Revalidating old post at path: ${oldPath}`)
 
       safeRevalidatePath(oldPath, payload.logger)
-      revalidateTag('posts-sitemap')
+      safeRevalidateTag('posts-sitemap', payload.logger)
     }
   }
   return doc
@@ -52,7 +63,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({
     const path = `/posts/${doc?.slug}`
 
     safeRevalidatePath(path, payload.logger)
-    revalidateTag('posts-sitemap')
+    safeRevalidateTag('posts-sitemap', payload.logger)
   }
 
   return doc

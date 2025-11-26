@@ -16,6 +16,17 @@ function safeRevalidatePath(path: string, logger: { info: (msg: string) => void 
   }
 }
 
+/**
+ * Safely revalidate a tag, catching any errors from Next.js internal issues
+ */
+function safeRevalidateTag(tag: string, logger: { info: (msg: string) => void }) {
+  try {
+    revalidateTag(tag)
+  } catch (error) {
+    logger.info(`Warning: Could not revalidate tag ${tag}: ${error}`)
+  }
+}
+
 export const revalidatePage: CollectionAfterChangeHook<Page> = ({
   doc,
   previousDoc,
@@ -28,7 +39,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
       payload.logger.info(`Revalidating page at path: ${path}`)
 
       safeRevalidatePath(path, payload.logger)
-      revalidateTag('pages-sitemap')
+      safeRevalidateTag('pages-sitemap', payload.logger)
     }
 
     // If the page was previously published, we need to revalidate the old path
@@ -38,7 +49,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
       payload.logger.info(`Revalidating old page at path: ${oldPath}`)
 
       safeRevalidatePath(oldPath, payload.logger)
-      revalidateTag('pages-sitemap')
+      safeRevalidateTag('pages-sitemap', payload.logger)
     }
   }
   return doc
@@ -51,7 +62,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({
   if (!context.disableRevalidate) {
     const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`
     safeRevalidatePath(path, payload.logger)
-    revalidateTag('pages-sitemap')
+    safeRevalidateTag('pages-sitemap', payload.logger)
   }
 
   return doc
