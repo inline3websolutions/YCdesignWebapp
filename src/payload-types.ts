@@ -161,7 +161,7 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'animatedGsap';
     richText?: {
       root: {
         type: string;
@@ -201,9 +201,147 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    tagline?: string | null;
+    established?: string | null;
+    scrollIndicator?: boolean | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | {
+        items: {
+          text: string;
+          id?: string | null;
+        }[];
+        accent?: string | null;
+        backgroundColor?: ('yellow' | 'dark') | null;
+        tilted?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycMarquee';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        highlight?: string | null;
+        body: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        primaryLink?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        image: string | Media;
+        label?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycAbout';
+      }
+    | {
+        eyebrow?: string | null;
+        items: {
+          title: string;
+          description?: string | null;
+          image?: (string | null) | Media;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycServices';
+      }
+    | {
+        eyebrow?: string | null;
+        title: string;
+        highlight?: string | null;
+        cards: {
+          image: string | Media;
+          title: string;
+          tag?: string | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycRestoredGallery';
+      }
+    | {
+        sectionTitle?: string | null;
+        bigFeature: {
+          image: string | Media;
+          title: string;
+          subtitle?: string | null;
+        };
+        sideImage?: {
+          image?: (string | null) | Media;
+          title?: string | null;
+        };
+        ctaTile?: {
+          title?: string | null;
+          link?:
+            | {
+                link: {
+                  type?: ('reference' | 'custom') | null;
+                  newTab?: boolean | null;
+                  reference?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
+                  url?: string | null;
+                  label: string;
+                  /**
+                   * Choose how the link should be rendered.
+                   */
+                  appearance?: ('default' | 'outline') | null;
+                };
+                id?: string | null;
+              }[]
+            | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycCustomFeature';
+      }
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -1203,6 +1341,9 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               id?: T;
             };
+        tagline?: T;
+        established?: T;
+        scrollIndicator?: T;
         media?: T;
       };
   layout?:
@@ -1213,6 +1354,120 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        ycMarquee?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              accent?: T;
+              backgroundColor?: T;
+              tilted?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ycAbout?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              highlight?: T;
+              body?: T;
+              primaryLink?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                          appearance?: T;
+                        };
+                    id?: T;
+                  };
+              image?: T;
+              label?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ycServices?:
+          | T
+          | {
+              eyebrow?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        ycRestoredGallery?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              highlight?: T;
+              cards?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    tag?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        ycCustomFeature?:
+          | T
+          | {
+              sectionTitle?: T;
+              bigFeature?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    subtitle?: T;
+                  };
+              sideImage?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                  };
+              ctaTile?:
+                | T
+                | {
+                    title?: T;
+                    link?:
+                      | T
+                      | {
+                          link?:
+                            | T
+                            | {
+                                type?: T;
+                                newTab?: T;
+                                reference?: T;
+                                url?: T;
+                                label?: T;
+                                appearance?: T;
+                              };
+                          id?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T

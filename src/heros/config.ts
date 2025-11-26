@@ -35,6 +35,10 @@ export const hero: Field = {
           label: 'Low Impact',
           value: 'lowImpact',
         },
+        {
+          label: 'Animated GSAP',
+          value: 'animatedGsap',
+        },
       ],
       required: true,
     },
@@ -59,10 +63,34 @@ export const hero: Field = {
       },
     }),
     {
+      name: 'tagline',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'animatedGsap',
+      },
+    },
+    {
+      name: 'established',
+      type: 'text',
+      defaultValue: 'Est. Mumbai 2015',
+      admin: {
+        condition: (_, { type } = {}) => type === 'animatedGsap',
+      },
+    },
+    {
+      name: 'scrollIndicator',
+      type: 'checkbox',
+      label: 'Show Scroll Indicator',
+      admin: {
+        condition: (_, { type } = {}) => type === 'animatedGsap',
+      },
+    },
+    {
       name: 'media',
       type: 'upload',
       admin: {
-        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+        condition: (_, { type } = {}) =>
+          ['highImpact', 'mediumImpact', 'animatedGsap'].includes(type),
       },
       relationTo: 'media',
       required: true,

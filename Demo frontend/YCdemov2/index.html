@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YC Design | Preserving Legends. Building Icons.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'yc-yellow': '#FFC107', /* Maintained Yellow Accent */
+              'yc-silver': '#E4E4E7', /* Zinc-200: Premium Neutral Silver */
+              'yc-dark': '#09090B',   /* Zinc-950: Deepest Industrial Black */
+              'yc-metal': '#18181B',  /* Zinc-900: Heavy Metal */
+              'yc-muted': '#27272A',  /* Zinc-800: Structural Grey */
+            },
+            fontFamily: {
+              syne: ['Syne', 'sans-serif'],
+              rubik: ['Rubik', 'sans-serif'],
+            },
+            backgroundImage: {
+              'brushed-metal': "url('https://www.transparenttextures.com/patterns/brushed-alum.png')",
+              'mesh-pattern': "radial-gradient(circle, #27272A 1px, transparent 1px)",
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #FAFAFA; /* Light mode default */
+        color: #18181B;
+        overflow-x: hidden;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      .dark body {
+        background-color: #09090B;
+        color: #E4E4E7;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .dark ::-webkit-scrollbar-track {
+        background: #09090B;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #A1A1AA;
+        border-radius: 4px;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #27272A;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #FFC107;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-zinc-50 dark:bg-yc-dark transition-colors duration-500">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

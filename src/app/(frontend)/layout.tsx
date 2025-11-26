@@ -6,8 +6,7 @@ import { GeistSans } from 'geist/font/sans'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
-import { Footer } from '@/Footer/Component'
-import { Header } from '@/Header/Component'
+import { YCLayoutWrapper } from '@/components/yc'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
@@ -25,8 +24,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body>
+      <body className="bg-white dark:bg-yc-dark text-zinc-900 dark:text-white antialiased selection:bg-yc-yellow selection:text-black relative overflow-x-hidden transition-colors duration-500">
+        {/* Noise Texture Overlay */}
+        <div className="fixed inset-0 z-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none bg-noise mix-blend-overlay"></div>
+
         <Providers>
           <AdminBar
             adminBarProps={{
@@ -34,9 +42,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          <Header />
-          {children}
-          <Footer />
+          <YCLayoutWrapper>{children}</YCLayoutWrapper>
         </Providers>
       </body>
     </html>

@@ -40,9 +40,7 @@ export default async function Page() {
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
           <h1>Custom Motorcycles</h1>
-          <p className="text-lg">
-            Explore our collection of custom-built motorcycles
-          </p>
+          <p className="text-lg">Explore our collection of custom-built motorcycles</p>
         </div>
       </div>
 

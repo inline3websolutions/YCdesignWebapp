@@ -7,6 +7,11 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { YCMarqueeBlock } from '@/blocks/YCMarquee/Component'
+import { YCAboutBlock } from '@/blocks/YCAbout/Component'
+import { YCServicesBlock } from '@/blocks/YCServices/Component'
+import { YCRestoredGalleryBlock } from '@/blocks/YCRestoredGallery/Component'
+import { YCCustomFeatureBlock } from '@/blocks/YCCustomFeature/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -14,6 +19,11 @@ const blockComponents = {
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+  ycMarquee: YCMarqueeBlock,
+  ycAbout: YCAboutBlock,
+  ycServices: YCServicesBlock,
+  ycRestoredGallery: YCRestoredGalleryBlock,
+  ycCustomFeature: YCCustomFeatureBlock,
 }
 
 export const RenderBlocks: React.FC<{

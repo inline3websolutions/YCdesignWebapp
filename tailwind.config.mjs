@@ -92,10 +92,22 @@ const config = {
         success: 'hsl(var(--success))',
         error: 'hsl(var(--error))',
         warning: 'hsl(var(--warning))',
+        'yc-yellow': '#FFC107',
+        'yc-silver': '#E4E4E7',
+        'yc-dark': '#09090B',
+        'yc-metal': '#18181B',
+        'yc-muted': '#27272A',
       },
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
-        sans: ['var(--font-geist-sans)'],
+        sans: ['var(--font-geist-sans)', 'Space Grotesk', 'sans-serif'],
+        display: ['Syne', 'sans-serif'],
+        syne: ['Syne', 'sans-serif'],
+        rubik: ['Rubik', 'sans-serif'],
+      },
+      backgroundImage: {
+        'brushed-metal': "url('https://www.transparenttextures.com/patterns/brushed-alum.png')",
+        'mesh-pattern': 'radial-gradient(circle, #27272A 1px, transparent 1px)',
       },
       keyframes: {
         'accordion-down': {
