@@ -4,10 +4,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import gsap from 'gsap'
+import { Search } from 'lucide-react'
 import { Logo } from '@/components/yc'
+import GlobalSearch from './GlobalSearch'
 
 const YCHeader: React.FC = () => {
   const [scrolled, setScrolled] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const pathname = usePathname()
   const navRef = useRef<HTMLElement>(null)
 
@@ -18,6 +21,15 @@ const YCHeader: React.FC = () => {
     }
     window.addEventListener('scroll', handleScroll)
 
+    // Keyboard shortcut for search (Cmd+K or Ctrl+K)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+
     // Initial enter animation
     if (navRef.current) {
       gsap.fromTo(
@@ -27,7 +39,10 @@ const YCHeader: React.FC = () => {
       )
     }
 
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   }, [])
 
   // Handle Hash Scrolling
@@ -47,12 +62,15 @@ const YCHeader: React.FC = () => {
     { name: 'Studio', mobileName: 'Studio', path: '/#about' },
     { name: 'Work', mobileName: 'Work', path: '/portfolio' },
     { name: 'Inventory', mobileName: 'Shop', path: '/sales' },
+    { name: 'Blog', mobileName: 'Blog', path: '/blog' },
   ]
 
   const isActive = (path: string) => {
     if (path === '/portfolio' && pathname?.includes('portfolio')) return true
     if (path === '/portfolio' && pathname?.includes('project')) return true
     if (path === '/sales' && pathname?.includes('sales')) return true
+    if (path === '/blog' && pathname?.includes('blog')) return true
+    if (path === '/blog' && pathname?.includes('posts')) return true
     if (path === '/' && pathname === '/') return true
     if (path.includes('#') && pathname === '/') return true
     return false
@@ -131,7 +149,16 @@ const YCHeader: React.FC = () => {
         </div>
 
         {/* CTA */}
-        <div className="flex items-center gap-3 shrink-0 z-20">
+        <div className="flex items-center gap-2 md:gap-3 shrink-0 z-20">
+          {/* Search Button */}
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="p-2 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900/50 hover:border-yc-yellow/50 text-zinc-500 hover:text-zinc-900 dark:hover:text-yc-yellow transition-colors duration-300"
+            aria-label="Search"
+          >
+            <Search size={16} />
+          </button>
+
           <Link
             href="/#contact"
             onClick={(e) => handleNavClick(e, '/#contact')}
@@ -144,6 +171,9 @@ const YCHeader: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Global Search Modal */}
+      <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </nav>
   )
 }
