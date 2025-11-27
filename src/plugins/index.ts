@@ -34,7 +34,7 @@ const generateURL: GenerateURL<Post | Page | RestoredMoto> = ({ doc }) => {
 
   // Check if it's RestoredMoto by checking for 'name' field
   if ('name' in doc && 'manufacturer' in doc && 'year' in doc) {
-    return `${url}/restored-moto/${doc.slug}`
+    return `${url}/project/${doc.slug}`
   }
 
   // Check if it's Post by checking for 'content' and 'heroImage'

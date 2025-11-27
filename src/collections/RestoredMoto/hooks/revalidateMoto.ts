@@ -34,7 +34,7 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
 }) => {
   if (!context.disableRevalidate) {
     if (doc._status === 'published') {
-      const path = `/restored-moto/${doc.slug}`
+      const path = `/project/${doc.slug}`
 
       payload.logger.info(`Revalidating moto at path: ${path}`)
 
@@ -52,7 +52,7 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
-      const oldPath = `/restored-moto/${previousDoc.slug}`
+      const oldPath = `/project/${previousDoc.slug}`
 
       payload.logger.info(`Revalidating old moto at path: ${oldPath}`)
 
@@ -76,7 +76,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<RestoredMoto> = ({
   req: { payload, context },
 }) => {
   if (!context.disableRevalidate) {
-    const path = `/restored-moto/${doc?.slug}`
+    const path = `/project/${doc?.slug}`
 
     payload.logger.info(`Revalidating deleted moto at path: ${path}`)
 

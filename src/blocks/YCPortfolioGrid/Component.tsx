@@ -46,8 +46,7 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
   }
 
   const getProjectLink = (project: RestoredMoto | CustomMotorcycle) => {
-    const basePath = portfolioType === 'restored' ? '/restored-moto' : '/custom-motorcycles'
-    return `${basePath}/${project.slug}`
+    return `/project/${project.slug}`
   }
 
   const filterLabel = portfolioType === 'restored' ? 'Restoration' : 'Modification'

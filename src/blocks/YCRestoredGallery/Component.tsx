@@ -90,7 +90,7 @@ export const YCRestoredGalleryBlock: React.FC<Props> = (props) => {
           return (
             <Link
               key={motorcycle.id || index}
-              href={`/restored-moto/${motorcycle.slug}`}
+              href={`/project/${motorcycle.slug}`}
               className={cn(
                 'gallery-card min-w-[85vw] md:min-w-[40vw] snap-center group block opacity-0',
               )}

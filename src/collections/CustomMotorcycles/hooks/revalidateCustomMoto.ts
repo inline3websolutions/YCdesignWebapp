@@ -34,7 +34,7 @@ export const revalidateCustomMoto: CollectionAfterChangeHook<CustomMotorcycle> =
 }) => {
   if (!context.disableRevalidate) {
     if (doc._status === 'published') {
-      const path = `/custom-motorcycles/${doc.slug}`
+      const path = `/project/${doc.slug}`
 
       payload.logger.info(`Revalidating custom motorcycle at path: ${path}`)
 
@@ -52,7 +52,7 @@ export const revalidateCustomMoto: CollectionAfterChangeHook<CustomMotorcycle> =
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
-      const oldPath = `/custom-motorcycles/${previousDoc.slug}`
+      const oldPath = `/project/${previousDoc.slug}`
 
       payload.logger.info(`Revalidating old custom motorcycle at path: ${oldPath}`)
 
@@ -76,9 +76,9 @@ export const revalidateDelete: CollectionAfterDeleteHook<CustomMotorcycle> = ({
   req: { payload, context },
 }) => {
   if (!context.disableRevalidate) {
-    const path = `/custom-motorcycles/${doc?.slug}`
+    const path = `/project/${doc?.slug}`
 
-    payload.logger.info(`Revalidating deleted custom motorcycle at path: ${path}`)
+      payload.logger.info(`Revalidating deleted custom motorcycle at path: ${path}`)
 
     safeRevalidatePath(path, payload.logger)
 

@@ -9,6 +9,36 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+
+  const [restoredMoto, customMoto] = await Promise.all([
+    payload.find({
+      collection: 'restored-moto',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: { slug: true },
+    }),
+    payload.find({
+      collection: 'custom-motorcycles',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: { slug: true },
+    }),
+  ])
+
+  const params = [
+    ...restoredMoto.docs.map((doc) => ({ slug: doc.slug })),
+    ...customMoto.docs.map((doc) => ({ slug: doc.slug })),
+  ]
+
+  return params
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const payload = await getPayload({ config: configPromise })
