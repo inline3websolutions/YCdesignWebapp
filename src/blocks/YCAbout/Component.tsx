@@ -162,9 +162,7 @@ export const YCAboutBlock: React.FC<Props> = (props) => {
               <CMSLink
                 className="text-zinc-900 dark:text-white border-b border-yc-yellow pb-1 hover:text-yc-yellow transition-colors font-syne uppercase tracking-wider"
                 {...primaryLink[0].link}
-              >
-                {primaryLink[0].link.label}
-              </CMSLink>
+              />
             )}
           </div>
         </div>

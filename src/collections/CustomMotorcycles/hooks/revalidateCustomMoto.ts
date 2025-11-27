@@ -78,7 +78,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<CustomMotorcycle> = ({
   if (!context.disableRevalidate) {
     const path = `/project/${doc?.slug}`
 
-      payload.logger.info(`Revalidating deleted custom motorcycle at path: ${path}`)
+    payload.logger.info(`Revalidating deleted custom motorcycle at path: ${path}`)
 
     safeRevalidatePath(path, payload.logger)
 

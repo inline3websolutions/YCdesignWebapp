@@ -50,7 +50,7 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
   }
 
   const filterLabel = portfolioType === 'restored' ? 'Restoration' : 'Modification'
-  
+
   // Generate the correct viewAllLink based on portfolioType if not provided or using old format
   const getViewAllLink = () => {
     if (viewAllLink && viewAllLink.includes('/portfolio')) {
@@ -59,7 +59,7 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
     // Default to portfolio page with the appropriate filter
     return `/portfolio?filter=${filterLabel}`
   }
-  
+
   const archiveLink = getViewAllLink()
 
   return (

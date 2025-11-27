@@ -374,7 +374,7 @@ export interface Page {
          */
         limit?: number | null;
         /**
-         * URL for the "View All" button
+         * URL for the "View All" button (e.g., /portfolio?filter=Restoration or /portfolio?filter=Modification)
          */
         viewAllLink?: string | null;
         id?: string | null;
