@@ -4,7 +4,9 @@ import configPromise from '@payload-config'
 import type { Media, Manufacturer } from '@/payload-types'
 
 // Helper function to extract manufacturer name from string | Manufacturer
-function getManufacturerName(manufacturer: string | Manufacturer | null | undefined): string | undefined {
+function getManufacturerName(
+  manufacturer: string | Manufacturer | null | undefined,
+): string | undefined {
   if (!manufacturer) return undefined
   if (typeof manufacturer === 'string') return manufacturer
   return manufacturer.name

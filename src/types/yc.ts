@@ -1,4 +1,4 @@
-import type { Media, RestoredMoto, CustomMotorcycle, Manufacturer } from '@/payload-types'
+import type { Media, RestoredMoto, CustomMotorcycle, Manufacturer, Sale } from '@/payload-types'
 
 export interface Project {
   id: string
@@ -139,61 +139,34 @@ export const testimonials: Testimonial[] = [
   },
 ]
 
-// Static sales data (can be replaced with a Payload collection later)
-export const saleBikes: SaleBike[] = [
-  {
-    id: 'sale-001',
-    title: 'Honda CB750 Nighthawk',
-    price: '₹ 4,50,000',
-    status: 'Available',
-    year: '1998',
-    engine: '750cc Inline-4',
-    mileage: '24,000 km',
-    description:
-      'A pristine example of the reliable Nighthawk series. This unit has been tastefully modified with a brat-style seat, LED lighting, and a custom 4-into-1 exhaust system that sings. Fully serviced carbs and new tires.',
-    mainImage:
-      'https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?q=80&w=1000&auto=format&fit=crop',
-    features: ['Custom Exhaust', 'LED Indicators', 'Brat Seat', 'New Tires', 'Serviced Carbs'],
-    gallery: [
-      'https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1615172282427-9a5752d358cd?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1000&auto=format&fit=crop',
-    ],
-  },
-  {
-    id: 'sale-002',
-    title: 'Yamaha RX100 Restomod',
-    price: '₹ 1,85,000',
-    status: 'Available',
-    year: '1992',
-    engine: '98cc 2-Stroke',
-    mileage: '1,200 km (Post Rebuild)',
-    description:
-      'The street legend. Fully restored frame-up build. Ported barrel for extra punch, expansion chamber exhaust, and a stunning Midnight Blue paint job with original gold decals. Papers current.',
-    mainImage:
-      'https://images.unsplash.com/photo-1609630875171-b1321377ee65?q=80&w=1000&auto=format&fit=crop',
-    features: ['Ported Barrel', 'Expansion Chamber', 'Disc Brake Upgrade', 'New Electricals'],
-    gallery: [
-      'https://images.unsplash.com/photo-1609630875171-b1321377ee65?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?q=80&w=1000&auto=format&fit=crop',
-    ],
-  },
-  {
-    id: 'sale-003',
-    title: 'BMW R80 Café Racer',
-    price: '₹ 12,00,000',
-    status: 'Reserved',
-    year: '1986',
-    engine: '800cc Boxer Twin',
-    mileage: '45,000 km',
-    description:
-      'A German masterpiece re-imagined. Mono-shock conversion, Motogadget electronics, and a handmade aluminum tank. This is a collector-grade build for the discerning rider.',
-    mainImage:
-      'https://images.unsplash.com/photo-1622185135505-2d795003994a?q=80&w=1000&auto=format&fit=crop',
-    features: ['Motogadget M-Unit', 'Handmade Tank', 'Mono-shock', 'Bar-end Mirrors'],
-    gallery: [
-      'https://images.unsplash.com/photo-1622185135505-2d795003994a?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1000&auto=format&fit=crop',
-    ],
-  },
-]
+// Helper function to convert Payload Sale to SaleBike
+export function saleToSaleBike(sale: Sale): SaleBike {
+  const mainImage = sale.mainImage as Media | undefined
+  const gallery = sale.gallery as Media[] | undefined
+  const galleryUrls = gallery?.map((img) => img.url).filter((url): url is string => !!url) || []
+
+  // Convert lowercase status from Payload to capitalized status for frontend
+  const statusMap: Record<string, SaleBike['status']> = {
+    available: 'Available',
+    reserved: 'Reserved',
+    sold: 'Sold',
+  }
+
+  // Extract features array
+  const features = sale.features?.map((f) => f.feature) || []
+
+  return {
+    id: String(sale.id),
+    title: sale.title,
+    price: sale.price,
+    status: statusMap[sale.status] || 'Available',
+    year: String(sale.year),
+    engine: sale.engine,
+    mileage: sale.mileage,
+    description: getPlainTextFromRichText(sale.description),
+    mainImage: mainImage?.url || '/placeholder.jpg',
+    gallery: galleryUrls,
+    features,
+    slug: sale.slug || undefined,
+  }
+}

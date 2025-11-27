@@ -38,7 +38,10 @@ export const revalidateSale: CollectionAfterChangeHook<Sale> = ({
       payload.logger.info(`Revalidating sale at path: ${path}`)
 
       safeRevalidatePath(path, payload.logger)
+      safeRevalidatePath('/sales', payload.logger)
+      safeRevalidateTag('sales', payload.logger)
       safeRevalidateTag('sales-sitemap', payload.logger)
+      safeRevalidateTag(`sale-${doc.slug}`, payload.logger)
     }
 
     // If the sale was previously published, we need to revalidate the old path
@@ -48,7 +51,10 @@ export const revalidateSale: CollectionAfterChangeHook<Sale> = ({
       payload.logger.info(`Revalidating old sale at path: ${oldPath}`)
 
       safeRevalidatePath(oldPath, payload.logger)
+      safeRevalidatePath('/sales', payload.logger)
+      safeRevalidateTag('sales', payload.logger)
       safeRevalidateTag('sales-sitemap', payload.logger)
+      safeRevalidateTag(`sale-${previousDoc.slug}`, payload.logger)
     }
   }
   return doc
@@ -62,7 +68,12 @@ export const revalidateDelete: CollectionAfterDeleteHook<Sale> = ({
     const path = `/sales/${doc?.slug}`
 
     safeRevalidatePath(path, payload.logger)
+    safeRevalidatePath('/sales', payload.logger)
+    safeRevalidateTag('sales', payload.logger)
     safeRevalidateTag('sales-sitemap', payload.logger)
+    if (doc?.slug) {
+      safeRevalidateTag(`sale-${doc.slug}`, payload.logger)
+    }
   }
 
   return doc

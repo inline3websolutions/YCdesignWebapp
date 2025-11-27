@@ -1,19 +1,66 @@
-import { Metadata } from 'next'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
+import { unstable_cache } from 'next/cache'
+import { draftMode } from 'next/headers'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { saleBikes } from '@/types/yc'
+
 import SaleDetailClient from './SaleDetailClient'
+import { saleToSaleBike } from '@/types/yc'
 
 interface Props {
   params: Promise<{ id: string }>
 }
 
+async function getSaleBySlug(slug: string) {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'sales',
+    depth: 2,
+    limit: 1,
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+  })
+
+  return result.docs[0] || null
+}
+
+async function getAllSales() {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'sales',
+    depth: 1,
+    limit: 100,
+    where: {
+      _status: {
+        equals: 'published',
+      },
+    },
+  })
+
+  return result.docs
+}
+
+// Cache individual sale fetch
+const getCachedSaleBySlug = (slug: string) =>
+  unstable_cache(() => getSaleBySlug(slug), [`sale-${slug}`], {
+    tags: ['sales', `sale-${slug}`],
+  })()
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
-  const bike = saleBikes.find((b) => b.id === id || b.slug === id)
+  const sale = await getCachedSaleBySlug(id)
 
-  if (!bike) {
+  if (!sale) {
     return { title: 'Bike Not Found | YC Design' }
   }
+
+  const bike = saleToSaleBike(sale)
 
   return {
     title: `${bike.title} | For Sale | YC Design`,
@@ -22,18 +69,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  return saleBikes.map((bike) => ({
-    id: bike.slug || bike.id,
+  const sales = await getAllSales()
+
+  return sales.map((sale) => ({
+    id: sale.slug,
   }))
 }
 
 export default async function SaleDetailPage({ params }: Props) {
   const { id } = await params
-  const bike = saleBikes.find((b) => b.id === id || b.slug === id)
+  const { isEnabled: isDraftMode } = await draftMode()
 
-  if (!bike) {
+  // Use direct fetch in draft mode, cached otherwise
+  const sale = isDraftMode ? await getSaleBySlug(id) : await getCachedSaleBySlug(id)
+
+  if (!sale) {
     notFound()
   }
+
+  const bike = saleToSaleBike(sale)
 
   return <SaleDetailClient bike={bike} />
 }

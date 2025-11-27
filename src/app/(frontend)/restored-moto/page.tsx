@@ -91,7 +91,9 @@ export default async function Page() {
                   </h3>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     <p className="font-medium">
-                      {typeof moto.manufacturer === 'object' ? moto.manufacturer?.name : moto.manufacturer}
+                      {typeof moto.manufacturer === 'object'
+                        ? moto.manufacturer?.name
+                        : moto.manufacturer}
                     </p>
                     <p>Year: {moto.year}</p>
                   </div>
