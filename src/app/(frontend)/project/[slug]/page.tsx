@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { restoredMotoToProject, customMotoToProject } from '@/types/yc'
+import { restoredMotoToProject, customMotoToProject, getManufacturerName } from '@/types/yc'
 import ProjectDetailClient from './ProjectDetailClient'
 
 interface Props {
@@ -22,9 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (restoredResult.docs.length > 0) {
     const doc = restoredResult.docs[0]
+    const manufacturerName = getManufacturerName(doc.manufacturer)
     return {
       title: `${doc.name} | YC Design`,
-      description: `${doc.manufacturer} ${doc.name} (${doc.year}) - Restoration by YC Design`,
+      description: `${manufacturerName} ${doc.name} (${doc.year}) - Restoration by YC Design`,
     }
   }
 
@@ -37,9 +38,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (customResult.docs.length > 0) {
     const doc = customResult.docs[0]
+    const manufacturerName = getManufacturerName(doc.manufacturer)
     return {
       title: `${doc.name} | YC Design`,
-      description: `${doc.manufacturer} ${doc.name} (${doc.year}) - Custom Build by YC Design`,
+      description: `${manufacturerName} ${doc.name} (${doc.year}) - Custom Build by YC Design`,
     }
   }
 
