@@ -50,6 +50,17 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
   }
 
   const filterLabel = portfolioType === 'restored' ? 'Restoration' : 'Modification'
+  
+  // Generate the correct viewAllLink based on portfolioType if not provided or using old format
+  const getViewAllLink = () => {
+    if (viewAllLink && viewAllLink.includes('/portfolio')) {
+      return viewAllLink
+    }
+    // Default to portfolio page with the appropriate filter
+    return `/portfolio?filter=${filterLabel}`
+  }
+  
+  const archiveLink = getViewAllLink()
 
   return (
     <section
@@ -78,9 +89,9 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
               </span>
             </h3>
           </div>
-          {viewAllLink && (
+          {archiveLink && (
             <Link
-              href={viewAllLink}
+              href={archiveLink}
               className="hidden md:flex items-center gap-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors font-syne uppercase tracking-wider text-sm group"
             >
               Explore Archive
@@ -130,9 +141,9 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
           })}
 
           {/* Mobile 'View All' Card */}
-          {viewAllLink && (
+          {archiveLink && (
             <Link
-              href={viewAllLink}
+              href={archiveLink}
               className="flex-shrink-0 w-[40vw] sm:w-[200px] snap-center flex flex-col items-center justify-center border border-zinc-200 dark:border-zinc-800 rounded-sm bg-zinc-100 dark:bg-zinc-900/50 hover:bg-zinc-200 dark:hover:bg-zinc-900 transition-colors aspect-[3/4]"
             >
               <div className="w-14 h-14 rounded-full border border-zinc-300 dark:border-zinc-700 flex items-center justify-center text-yc-yellow mb-4">
@@ -208,10 +219,10 @@ export const YCPortfolioGridBlock: React.FC<Props> = async (props) => {
         </div>
 
         {/* Mobile View All Footer */}
-        {viewAllLink && (
+        {archiveLink && (
           <div className="md:hidden mt-6 text-center">
             <Link
-              href={viewAllLink}
+              href={archiveLink}
               className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-500 text-xs uppercase tracking-widest font-rubik"
             >
               View All {filterLabel} Projects <ArrowRight size={14} />

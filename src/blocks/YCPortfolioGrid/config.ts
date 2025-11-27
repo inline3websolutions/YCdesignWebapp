@@ -48,10 +48,10 @@ export const YCPortfolioGrid: Block = {
     {
       name: 'viewAllLink',
       type: 'text',
-      defaultValue: '/restored-moto',
+      defaultValue: '/portfolio?filter=Restoration',
       label: 'View All Link',
       admin: {
-        description: 'URL for the "View All" button',
+        description: 'URL for the "View All" button (e.g., /portfolio?filter=Restoration or /portfolio?filter=Modification)',
       },
     },
   ],
