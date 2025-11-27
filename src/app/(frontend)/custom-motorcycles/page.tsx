@@ -38,19 +38,15 @@ async function getMotorcycles() {
 }
 
 // Cache with tags that will be invalidated by Payload hooks
-const getCachedMotorcycles = unstable_cache(
-  getMotorcycles,
-  ['custom-motorcycles-listing'],
-  { tags: ['custom-motorcycles', 'pages-custom-motorcycles'] }
-)
+const getCachedMotorcycles = unstable_cache(getMotorcycles, ['custom-motorcycles-listing'], {
+  tags: ['custom-motorcycles', 'pages-custom-motorcycles'],
+})
 
 export default async function Page() {
   const { isEnabled: isDraftMode } = await draftMode()
 
   // Use direct fetch in draft mode (for live preview), cached otherwise
-  const motorcycles = isDraftMode
-    ? await getMotorcycles()
-    : await getCachedMotorcycles()
+  const motorcycles = isDraftMode ? await getMotorcycles() : await getCachedMotorcycles()
 
   return (
     <div className="pt-24 pb-24">

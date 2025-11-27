@@ -40,11 +40,11 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
 
       // Revalidate the specific document path
       safeRevalidatePath(path, payload.logger)
-      
+
       // Revalidate collection-level cache tags (used by unstable_cache)
       safeRevalidateTag('restored-moto', payload.logger)
       safeRevalidateTag('moto-sitemap', payload.logger)
-      
+
       // Revalidate page-specific cache tags
       safeRevalidateTag('pages-home', payload.logger)
       safeRevalidateTag('pages-portfolio', payload.logger)
@@ -57,11 +57,11 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
       payload.logger.info(`Revalidating old moto at path: ${oldPath}`)
 
       safeRevalidatePath(oldPath, payload.logger)
-      
+
       // Revalidate collection-level cache tags
       safeRevalidateTag('restored-moto', payload.logger)
       safeRevalidateTag('moto-sitemap', payload.logger)
-      
+
       // Revalidate page-specific cache tags
       safeRevalidateTag('pages-home', payload.logger)
       safeRevalidateTag('pages-portfolio', payload.logger)
@@ -81,11 +81,11 @@ export const revalidateDelete: CollectionAfterDeleteHook<RestoredMoto> = ({
     payload.logger.info(`Revalidating deleted moto at path: ${path}`)
 
     safeRevalidatePath(path, payload.logger)
-    
+
     // Revalidate collection-level cache tags
     safeRevalidateTag('restored-moto', payload.logger)
     safeRevalidateTag('moto-sitemap', payload.logger)
-    
+
     // Revalidate page-specific cache tags
     safeRevalidateTag('pages-home', payload.logger)
     safeRevalidateTag('pages-portfolio', payload.logger)

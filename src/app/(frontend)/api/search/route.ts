@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
-import type { Media } from '@/payload-types'
+import type { Media, Manufacturer } from '@/payload-types'
+
+// Helper function to extract manufacturer name from string | Manufacturer
+function getManufacturerName(manufacturer: string | Manufacturer | null | undefined): string | undefined {
+  if (!manufacturer) return undefined
+  if (typeof manufacturer === 'string') return manufacturer
+  return manufacturer.name
+}
 
 export interface SearchResult {
   id: string
@@ -39,15 +46,16 @@ export async function GET(request: NextRequest) {
 
     restoredResults.docs.forEach((doc) => {
       const heroImage = doc.heroImage as Media | undefined
+      const manufacturerName = getManufacturerName(doc.manufacturer)
       results.push({
         id: String(doc.id),
         type: 'restoration',
         title: doc.name,
-        description: `${doc.manufacturer} ${doc.year}`,
+        description: `${manufacturerName || ''} ${doc.year}`.trim(),
         image: heroImage?.url || '/placeholder.jpg',
         url: `/project/${doc.slug}`,
         year: doc.year,
-        manufacturer: doc.manufacturer,
+        manufacturer: manufacturerName,
       })
     })
 
@@ -64,15 +72,16 @@ export async function GET(request: NextRequest) {
 
     customResults.docs.forEach((doc) => {
       const heroImage = doc.heroImage as Media | undefined
+      const manufacturerName = getManufacturerName(doc.manufacturer)
       results.push({
         id: String(doc.id),
         type: 'modification',
         title: doc.name,
-        description: `${doc.manufacturer} ${doc.year}`,
+        description: `${manufacturerName || ''} ${doc.year}`.trim(),
         image: heroImage?.url || '/placeholder.jpg',
         url: `/project/${doc.slug}`,
         year: doc.year,
-        manufacturer: doc.manufacturer,
+        manufacturer: manufacturerName,
       })
     })
 

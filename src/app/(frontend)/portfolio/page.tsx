@@ -46,17 +46,13 @@ async function getCustomMotos() {
 }
 
 // Cache with tags that will be invalidated by Payload hooks
-const getCachedRestoredMotos = unstable_cache(
-  getRestoredMotos,
-  ['portfolio-restored-motos'],
-  { tags: ['restored-moto', 'pages-portfolio'] }
-)
+const getCachedRestoredMotos = unstable_cache(getRestoredMotos, ['portfolio-restored-motos'], {
+  tags: ['restored-moto', 'pages-portfolio'],
+})
 
-const getCachedCustomMotos = unstable_cache(
-  getCustomMotos,
-  ['portfolio-custom-motos'],
-  { tags: ['custom-motorcycles', 'pages-portfolio'] }
-)
+const getCachedCustomMotos = unstable_cache(getCustomMotos, ['portfolio-custom-motos'], {
+  tags: ['custom-motorcycles', 'pages-portfolio'],
+})
 
 export default async function PortfolioPage() {
   const { isEnabled: isDraftMode } = await draftMode()
