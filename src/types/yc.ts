@@ -39,7 +39,7 @@ export interface SaleBike {
 }
 
 // Helper function to get manufacturer name from relationship
-function getManufacturerName(
+export function getManufacturerName(
   manufacturer: string | number | Manufacturer | null | undefined,
 ): string {
   // Check for populated relationship object
