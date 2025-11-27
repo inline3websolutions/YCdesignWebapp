@@ -994,8 +994,7 @@ export interface RestoredMoto {
   /**
    * Select an existing manufacturer or create a new one
    */
-  manufacturer?: (string | null) | Manufacturer;
-  manufacturerLegacy?: string | null;
+  manufacturer: string | Manufacturer;
   /**
    * Enter the motorcycle year (1850 - current year)
    */
@@ -1072,8 +1071,7 @@ export interface CustomMotorcycle {
   /**
    * Select an existing manufacturer or create a new one
    */
-  manufacturer?: (string | null) | Manufacturer;
-  manufacturerLegacy?: string | null;
+  manufacturer: string | Manufacturer;
   /**
    * Enter the motorcycle year (1850 - current year)
    */
@@ -1966,7 +1964,6 @@ export interface UsersSelect<T extends boolean = true> {
 export interface RestoredMotoSelect<T extends boolean = true> {
   name?: T;
   manufacturer?: T;
-  manufacturerLegacy?: T;
   year?: T;
   heroImage?: T;
   images?: T;
@@ -2001,7 +1998,6 @@ export interface RestoredMotoSelect<T extends boolean = true> {
 export interface CustomMotorcyclesSelect<T extends boolean = true> {
   name?: T;
   manufacturer?: T;
-  manufacturerLegacy?: T;
   year?: T;
   heroImage?: T;
   images?: T;

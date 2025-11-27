@@ -17,7 +17,6 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidateMoto } from './hooks/revalidateMoto'
-import { handleLegacyManufacturer } from './hooks/handleLegacyManufacturer'
 
 import {
   MetaDescriptionField,
@@ -82,20 +81,12 @@ export const RestoredMoto: CollectionConfig<'restored-moto'> = {
               name: 'manufacturer',
               type: 'relationship',
               relationTo: 'manufacturers',
-              required: false, // Optional to allow migration of legacy string data
+              required: true,
               label: 'Manufacturer',
               hasMany: false,
               admin: {
                 allowCreate: true,
                 description: 'Select an existing manufacturer or create a new one',
-              },
-            },
-            {
-              name: 'manufacturerLegacy',
-              type: 'text',
-              admin: {
-                hidden: true, // Hidden field to preserve legacy data
-                readOnly: true,
               },
             },
             {
@@ -262,7 +253,7 @@ export const RestoredMoto: CollectionConfig<'restored-moto'> = {
   ],
   hooks: {
     afterChange: [revalidateMoto],
-    afterRead: [populateAuthors, handleLegacyManufacturer],
+    afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
   },
   versions: {

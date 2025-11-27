@@ -8,6 +8,9 @@ import HomeClient from './HomeClient'
 import { restoredMotoToProject, customMotoToProject, testimonials } from '@/types/yc'
 import type { Project } from '@/types/yc'
 
+// Static page - will be revalidated on-demand when content changes via Payload hooks
+export const dynamic = 'force-static'
+
 async function getRestoredMotos() {
   const payload = await getPayload({ config: configPromise })
 
@@ -42,18 +45,23 @@ async function getCustomMotos() {
   return result.docs
 }
 
-const getCachedRestoredMotos = unstable_cache(getRestoredMotos, ['restored-motos'], {
-  tags: ['restored-moto'],
-})
+// Cache with tags that will be invalidated by Payload hooks
+const getCachedRestoredMotos = unstable_cache(
+  getRestoredMotos,
+  ['home-restored-motos'],
+  { tags: ['restored-moto', 'pages-home'] }
+)
 
-const getCachedCustomMotos = unstable_cache(getCustomMotos, ['custom-motos'], {
-  tags: ['custom-motorcycles'],
-})
+const getCachedCustomMotos = unstable_cache(
+  getCustomMotos,
+  ['home-custom-motos'],
+  { tags: ['custom-motorcycles', 'pages-home'] }
+)
 
 export default async function HomePage() {
   const { isEnabled: isDraftMode } = await draftMode()
 
-  // Use direct fetch in draft mode, cached otherwise
+  // Use direct fetch in draft mode (for live preview), cached otherwise
   const [restoredMotos, customMotos] = isDraftMode
     ? await Promise.all([getRestoredMotos(), getCustomMotos()])
     : await Promise.all([getCachedRestoredMotos(), getCachedCustomMotos()])

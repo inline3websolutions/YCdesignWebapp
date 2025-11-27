@@ -38,46 +38,14 @@ export interface SaleBike {
   slug?: string
 }
 
-// Helper function to get manufacturer name from relationship or legacy string
+// Helper function to get manufacturer name from relationship
 function getManufacturerName(
   manufacturer: string | number | Manufacturer | null | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  doc?: any,
 ): string {
-  // First priority: check for populated relationship object (most reliable)
+  // Check for populated relationship object
   if (typeof manufacturer === 'object' && manufacturer !== null && 'name' in manufacturer) {
     return manufacturer.name || ''
   }
-
-  // Second: check if manufacturer is a plain string (legacy data, not an ObjectId)
-  if (typeof manufacturer === 'string') {
-    // If it looks like a MongoDB ObjectId (24 hex chars), it's an unpopulated relationship
-    if (/^[a-f0-9]{24}$/i.test(manufacturer)) {
-      // Check manufacturerLegacy for actual name (but also validate it's not an ObjectId)
-      if (
-        doc?.manufacturerLegacy &&
-        typeof doc.manufacturerLegacy === 'string' &&
-        !/^[a-f0-9]{24}$/i.test(doc.manufacturerLegacy)
-      ) {
-        return doc.manufacturerLegacy
-      }
-      return '' // Unpopulated relationship with no legacy name
-    }
-    return manufacturer // Legacy string data (actual name)
-  }
-
-  // Third: check manufacturerLegacy as fallback (but validate it's not an ObjectId)
-  if (
-    doc?.manufacturerLegacy &&
-    typeof doc.manufacturerLegacy === 'string' &&
-    !/^[a-f0-9]{24}$/i.test(doc.manufacturerLegacy)
-  ) {
-    return doc.manufacturerLegacy
-  }
-
-  // Handle number (shouldn't happen, but just in case)
-  if (typeof manufacturer === 'number') return ''
-
   return ''
 }
 
@@ -92,7 +60,7 @@ export function restoredMotoToProject(moto: RestoredMoto): Project {
     title: moto.name,
     category: 'Restoration',
     year: String(moto.year),
-    engine: getManufacturerName(moto.manufacturer, moto),
+    engine: getManufacturerName(moto.manufacturer),
     image: heroImage?.url || '/placeholder.jpg',
     gallery: galleryUrls,
     description: getPlainTextFromRichText(moto.content),
@@ -114,7 +82,7 @@ export function customMotoToProject(moto: CustomMotorcycle): Project {
     title: moto.name,
     category: 'Modification',
     year: String(moto.year),
-    engine: getManufacturerName(moto.manufacturer, moto),
+    engine: getManufacturerName(moto.manufacturer),
     image: heroImage?.url || '/placeholder.jpg',
     gallery: galleryUrls,
     description: getPlainTextFromRichText(moto.content),

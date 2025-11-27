@@ -38,10 +38,17 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
 
       payload.logger.info(`Revalidating moto at path: ${path}`)
 
+      // Revalidate the specific document path
       safeRevalidatePath(path, payload.logger)
-      safeRevalidateTag('moto-sitemap', payload.logger)
-      // Also revalidate the home page cache tag since it displays restored motos
+      
+      // Revalidate collection-level cache tags (used by unstable_cache)
       safeRevalidateTag('restored-moto', payload.logger)
+      safeRevalidateTag('moto-sitemap', payload.logger)
+      
+      // Revalidate page-specific cache tags
+      safeRevalidateTag('pages-home', payload.logger)
+      safeRevalidateTag('pages-portfolio', payload.logger)
+      safeRevalidateTag('pages-restored-moto', payload.logger)
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
@@ -50,8 +57,15 @@ export const revalidateMoto: CollectionAfterChangeHook<RestoredMoto> = ({
       payload.logger.info(`Revalidating old moto at path: ${oldPath}`)
 
       safeRevalidatePath(oldPath, payload.logger)
-      safeRevalidateTag('moto-sitemap', payload.logger)
+      
+      // Revalidate collection-level cache tags
       safeRevalidateTag('restored-moto', payload.logger)
+      safeRevalidateTag('moto-sitemap', payload.logger)
+      
+      // Revalidate page-specific cache tags
+      safeRevalidateTag('pages-home', payload.logger)
+      safeRevalidateTag('pages-portfolio', payload.logger)
+      safeRevalidateTag('pages-restored-moto', payload.logger)
     }
   }
   return doc
@@ -64,9 +78,18 @@ export const revalidateDelete: CollectionAfterDeleteHook<RestoredMoto> = ({
   if (!context.disableRevalidate) {
     const path = `/restored-moto/${doc?.slug}`
 
+    payload.logger.info(`Revalidating deleted moto at path: ${path}`)
+
     safeRevalidatePath(path, payload.logger)
-    safeRevalidateTag('moto-sitemap', payload.logger)
+    
+    // Revalidate collection-level cache tags
     safeRevalidateTag('restored-moto', payload.logger)
+    safeRevalidateTag('moto-sitemap', payload.logger)
+    
+    // Revalidate page-specific cache tags
+    safeRevalidateTag('pages-home', payload.logger)
+    safeRevalidateTag('pages-portfolio', payload.logger)
+    safeRevalidateTag('pages-restored-moto', payload.logger)
   }
 
   return doc

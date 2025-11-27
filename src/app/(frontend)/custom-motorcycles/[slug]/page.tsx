@@ -17,9 +17,10 @@ function getManufacturerName(
   manufacturer: string | number | Manufacturer | null | undefined,
 ): string {
   if (!manufacturer) return ''
-  if (typeof manufacturer === 'string') return manufacturer // backwards compatibility
-  if (typeof manufacturer === 'number') return ''
-  return manufacturer.name || ''
+  if (typeof manufacturer === 'object' && 'name' in manufacturer) {
+    return manufacturer.name || ''
+  }
+  return ''
 }
 
 export async function generateStaticParams() {

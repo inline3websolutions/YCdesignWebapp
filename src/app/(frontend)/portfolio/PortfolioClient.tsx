@@ -65,12 +65,15 @@ const PortfolioClient: React.FC<PortfolioClientProps> = ({ projects }) => {
 
   // Close dropdowns when clicking outside
   useEffect(() => {
-    const handleClickOutside = () => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      // Don't close if clicking inside a dropdown container
+      if (target.closest('.dropdown-container')) return
       setShowYearDropdown(false)
       setShowManufacturerDropdown(false)
     }
-    document.addEventListener('click', handleClickOutside)
-    return () => document.removeEventListener('click', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   const filteredProjects = useMemo(() => {
@@ -131,7 +134,7 @@ const PortfolioClient: React.FC<PortfolioClientProps> = ({ projects }) => {
         {/* Advanced Filters Row */}
         <div className="flex flex-wrap gap-4 mb-8 items-center">
           {/* Year Filter Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -190,7 +193,7 @@ const PortfolioClient: React.FC<PortfolioClientProps> = ({ projects }) => {
           </div>
 
           {/* Manufacturer Filter Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={(e) => {
                 e.stopPropagation()

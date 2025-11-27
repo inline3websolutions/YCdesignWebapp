@@ -38,10 +38,17 @@ export const revalidateCustomMoto: CollectionAfterChangeHook<CustomMotorcycle> =
 
       payload.logger.info(`Revalidating custom motorcycle at path: ${path}`)
 
+      // Revalidate the specific document path
       safeRevalidatePath(path, payload.logger)
-      safeRevalidateTag('custom-moto-sitemap', payload.logger)
-      // Also revalidate the home page cache tag since it displays custom motorcycles
+      
+      // Revalidate collection-level cache tags (used by unstable_cache)
       safeRevalidateTag('custom-motorcycles', payload.logger)
+      safeRevalidateTag('custom-moto-sitemap', payload.logger)
+      
+      // Revalidate page-specific cache tags
+      safeRevalidateTag('pages-home', payload.logger)
+      safeRevalidateTag('pages-portfolio', payload.logger)
+      safeRevalidateTag('pages-custom-motorcycles', payload.logger)
     }
 
     if (previousDoc._status === 'published' && doc._status !== 'published') {
@@ -50,8 +57,15 @@ export const revalidateCustomMoto: CollectionAfterChangeHook<CustomMotorcycle> =
       payload.logger.info(`Revalidating old custom motorcycle at path: ${oldPath}`)
 
       safeRevalidatePath(oldPath, payload.logger)
-      safeRevalidateTag('custom-moto-sitemap', payload.logger)
+      
+      // Revalidate collection-level cache tags
       safeRevalidateTag('custom-motorcycles', payload.logger)
+      safeRevalidateTag('custom-moto-sitemap', payload.logger)
+      
+      // Revalidate page-specific cache tags
+      safeRevalidateTag('pages-home', payload.logger)
+      safeRevalidateTag('pages-portfolio', payload.logger)
+      safeRevalidateTag('pages-custom-motorcycles', payload.logger)
     }
   }
   return doc
@@ -64,9 +78,18 @@ export const revalidateDelete: CollectionAfterDeleteHook<CustomMotorcycle> = ({
   if (!context.disableRevalidate) {
     const path = `/custom-motorcycles/${doc?.slug}`
 
+    payload.logger.info(`Revalidating deleted custom motorcycle at path: ${path}`)
+
     safeRevalidatePath(path, payload.logger)
-    safeRevalidateTag('custom-moto-sitemap', payload.logger)
+    
+    // Revalidate collection-level cache tags
     safeRevalidateTag('custom-motorcycles', payload.logger)
+    safeRevalidateTag('custom-moto-sitemap', payload.logger)
+    
+    // Revalidate page-specific cache tags
+    safeRevalidateTag('pages-home', payload.logger)
+    safeRevalidateTag('pages-portfolio', payload.logger)
+    safeRevalidateTag('pages-custom-motorcycles', payload.logger)
   }
 
   return doc

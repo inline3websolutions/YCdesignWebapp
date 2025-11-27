@@ -3,16 +3,18 @@ import type { Metadata } from 'next/types'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { unstable_cache } from 'next/cache'
+import { draftMode } from 'next/headers'
 import React from 'react'
 import PageClient from './page.client'
 
+// Static page - will be revalidated on-demand when content changes via Payload hooks
 export const dynamic = 'force-static'
-export const revalidate = 600
 
-export default async function Page() {
+async function getMotorcycles() {
   const payload = await getPayload({ config: configPromise })
 
-  const motorcycles = await payload.find({
+  return payload.find({
     collection: 'custom-motorcycles',
     depth: 1,
     limit: 12,
@@ -33,6 +35,22 @@ export default async function Page() {
       publishedAt: true,
     },
   })
+}
+
+// Cache with tags that will be invalidated by Payload hooks
+const getCachedMotorcycles = unstable_cache(
+  getMotorcycles,
+  ['custom-motorcycles-listing'],
+  { tags: ['custom-motorcycles', 'pages-custom-motorcycles'] }
+)
+
+export default async function Page() {
+  const { isEnabled: isDraftMode } = await draftMode()
+
+  // Use direct fetch in draft mode (for live preview), cached otherwise
+  const motorcycles = isDraftMode
+    ? await getMotorcycles()
+    : await getCachedMotorcycles()
 
   return (
     <div className="pt-24 pb-24">
