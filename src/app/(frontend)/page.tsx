@@ -1,79 +1,61 @@
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
+import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import configPromise from '@payload-config'
-import { unstable_cache } from 'next/cache'
 import { draftMode } from 'next/headers'
+import { cache } from 'react'
 
-import HomeClient from './HomeClient'
-import { restoredMotoToProject, customMotoToProject, testimonials } from '@/types/yc'
-import type { Project } from '@/types/yc'
+import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { RenderHero } from '@/heros/RenderHero'
+import { generateMeta } from '@/utilities/generateMeta'
+import { homeStatic } from '@/endpoints/seed/home-static'
+import { LivePreviewListener } from '@/components/LivePreviewListener'
+import PageClient from './[slug]/page.client'
 
-// Static page - will be revalidated on-demand when content changes via Payload hooks
-export const dynamic = 'force-static'
+const queryHomePage = cache(async () => {
+  const { isEnabled: draft } = await draftMode()
 
-async function getRestoredMotos() {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
-    collection: 'restored-moto',
+    collection: 'pages',
+    draft,
     depth: 2,
-    limit: 10,
+    limit: 1,
+    pagination: false,
+    overrideAccess: draft,
     where: {
-      _status: {
-        equals: 'published',
+      slug: {
+        equals: 'home',
       },
     },
   })
 
-  return result.docs
-}
-
-async function getCustomMotos() {
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'custom-motorcycles',
-    depth: 2,
-    limit: 10,
-    where: {
-      _status: {
-        equals: 'published',
-      },
-    },
-  })
-
-  return result.docs
-}
-
-// Cache with tags that will be invalidated by Payload hooks
-const getCachedRestoredMotos = unstable_cache(getRestoredMotos, ['home-restored-motos'], {
-  tags: ['restored-moto', 'pages-home'],
-})
-
-const getCachedCustomMotos = unstable_cache(getCustomMotos, ['home-custom-motos'], {
-  tags: ['custom-motorcycles', 'pages-home'],
+  return result.docs?.[0] || null
 })
 
 export default async function HomePage() {
-  const { isEnabled: isDraftMode } = await draftMode()
+  const { isEnabled: draft } = await draftMode()
 
-  // Use direct fetch in draft mode (for live preview), cached otherwise
-  const [restoredMotos, customMotos] = isDraftMode
-    ? await Promise.all([getRestoredMotos(), getCustomMotos()])
-    : await Promise.all([getCachedRestoredMotos(), getCachedCustomMotos()])
+  let page: RequiredDataFromCollectionSlug<'pages'> | null = await queryHomePage()
 
-  // Convert Payload data to Project format
-  const restorationProjects: Project[] = restoredMotos.map(restoredMotoToProject)
-  const modificationProjects: Project[] = customMotos.map(customMotoToProject)
+  // Fallback to static content if no home page exists in CMS
+  if (!page) {
+    page = homeStatic
+  }
 
-  // Combine all projects
-  const allProjects: Project[] = [...restorationProjects, ...modificationProjects]
+  const { hero, layout } = page
 
-  return <HomeClient projects={allProjects} testimonials={testimonials} />
+  return (
+    <article className="pt-16 pb-24">
+      <PageClient />
+      {draft && <LivePreviewListener />}
+      <RenderHero {...hero} />
+      <RenderBlocks blocks={layout} />
+    </article>
+  )
 }
 
-export const metadata: Metadata = {
-  title: 'YC Design | Preserving Legends. Building Icons.',
-  description:
-    'Custom motorcycle restoration and modification workshop in Mumbai. We specialize in bringing vintage mechanical souls back to life with modern precision.',
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await queryHomePage()
+  return generateMeta({ doc: page })
 }

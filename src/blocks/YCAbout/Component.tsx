@@ -93,10 +93,16 @@ export const YCAboutBlock: React.FC<Props> = (props) => {
             <div className="aspect-[4/5] md:aspect-square relative overflow-hidden bg-zinc-200 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700 p-2 transition-colors duration-500">
               {image && typeof image === 'object' && (
                 <Media
+                  key={image.id}
                   resource={image}
                   fill
                   imgClassName="object-cover filter grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
                 />
+              )}
+              {image && typeof image === 'string' && (
+                <div className="flex items-center justify-center h-full text-zinc-500">
+                  Image not loaded (ID: {image})
+                </div>
               )}
               {cornerLabel && (
                 <div className="absolute bottom-6 right-6 bg-yc-yellow text-black px-4 py-2 font-syne font-bold text-xl">
