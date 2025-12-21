@@ -36,6 +36,7 @@ export interface SaleBike {
   gallery: string[]
   features: string[]
   slug?: string
+  manufacturer: string
 }
 
 // Helper function to get manufacturer name from relationship (exported for use in other files)
@@ -162,6 +163,7 @@ export function saleToSaleBike(sale: Sale): SaleBike {
     status: statusMap[sale.status] || 'Available',
     year: String(sale.year),
     engine: sale.engine,
+    manufacturer: getManufacturerName(sale.manufacturer),
     mileage: sale.mileage,
     description: getPlainTextFromRichText(sale.description),
     mainImage: mainImage?.url || '/placeholder.jpg',

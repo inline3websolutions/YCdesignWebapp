@@ -10,9 +10,15 @@ interface YCLayoutWrapperProps {
   children: React.ReactNode
   headerData?: Header
   footerData?: Footer
+  enableLoader?: boolean | null
 }
 
-const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({ children, headerData, footerData }) => {
+const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({
+  children,
+  headerData,
+  footerData,
+  enableLoader = true,
+}) => {
   // Start with null to properly handle SSR/hydration
   const [showLoader, setShowLoader] = useState<boolean | null>(null)
   const [isMounted, setIsMounted] = useState(false)
@@ -22,7 +28,10 @@ const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({ children, headerData,
     setIsMounted(true)
     // Check if we've already loaded in this session
     const alreadyLoaded = sessionStorage.getItem('yc-loaded')
-    if (alreadyLoaded) {
+
+    if (enableLoader === false) {
+      setShowLoader(false)
+    } else if (alreadyLoaded) {
       setShowLoader(false)
     } else {
       setShowLoader(true)
@@ -40,7 +49,7 @@ const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({ children, headerData,
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [])
+  }, [enableLoader])
 
   const handleLoadingComplete = useCallback(() => {
     setShowLoader(false)
@@ -48,7 +57,7 @@ const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({ children, headerData,
   }, [])
 
   // Wait for client-side mount to determine loader state
-  if (!isMounted || showLoader === null) {
+  if (enableLoader !== false && (!isMounted || showLoader === null)) {
     // Return a minimal loading state to prevent flash
     return (
       <div className="fixed inset-0 z-[100] bg-[#09090B] flex items-center justify-center">
@@ -58,7 +67,7 @@ const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({ children, headerData,
   }
 
   // Show the full loader animation
-  if (showLoader) {
+  if (showLoader && enableLoader !== false) {
     return <YCLoader onComplete={handleLoadingComplete} />
   }
 

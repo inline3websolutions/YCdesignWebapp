@@ -17,6 +17,7 @@ import { ContactSubmissions } from './collections/ContactSubmissions'
 import { Manufacturers } from './collections/Manufacturers'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { SiteSettings } from './SiteSettings/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -86,7 +87,7 @@ export default buildConfig({
     Manufacturers,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, SiteSettings],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

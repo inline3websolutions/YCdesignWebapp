@@ -13,7 +13,7 @@ if (serverUrl) {
   try {
     const parsed = new URL(serverUrl)
     serverPattern = { hostname: parsed.hostname, protocol: parsed.protocol.replace(':', '') }
-  } catch (e) {
+  } catch {
     // invalid URL in env — ignore or log
     serverPattern = null
   }
@@ -22,6 +22,7 @@ if (serverUrl) {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    qualities: [25, 50, 75, 100],
     remotePatterns: [
       { hostname: 'localhost', protocol: 'http' },
       ...(serverPattern ? [serverPattern] : []),

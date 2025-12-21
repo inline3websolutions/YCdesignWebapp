@@ -122,10 +122,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-settings': SiteSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1141,6 +1143,7 @@ export interface CustomMotorcycle {
 export interface Sale {
   id: string;
   title: string;
+  manufacturer: string | Manufacturer;
   price: string;
   status: 'available' | 'reserved' | 'sold';
   year: number;
@@ -2060,6 +2063,7 @@ export interface CustomMotorcyclesSelect<T extends boolean = true> {
  */
 export interface SalesSelect<T extends boolean = true> {
   title?: T;
+  manufacturer?: T;
   price?: T;
   status?: T;
   year?: T;
@@ -2479,6 +2483,19 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: string;
+  /**
+   * Toggle the initial loading animation on or off.
+   */
+  enableLoader?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2538,6 +2555,16 @@ export interface FooterSelect<T extends boolean = true> {
         termsOfService?: T;
       };
   copyrightText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  enableLoader?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

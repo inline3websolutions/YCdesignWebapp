@@ -65,12 +65,23 @@ export const Sales: CollectionConfig<'sales'> = {
               type: 'row',
               fields: [
                 {
+                  name: 'manufacturer',
+                  type: 'relationship',
+                  relationTo: 'manufacturers',
+                  required: true,
+                  label: 'Manufacturer',
+                  hasMany: false,
+                  admin: {
+                    width: '50%',
+                  },
+                },
+                {
                   name: 'price',
                   type: 'text',
                   required: true,
-                  label: 'Price',
+                  label: 'Price (₹)',
                   admin: {
-                    placeholder: '₹ 4,50,000',
+                    placeholder: '4,50,000',
                     width: '50%',
                   },
                 },

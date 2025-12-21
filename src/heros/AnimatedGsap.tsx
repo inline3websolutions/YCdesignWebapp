@@ -80,6 +80,8 @@ export const AnimatedGsapHero: React.FC<AnimatedProps> = (props) => {
         {media && typeof media === 'object' && (
           <Media
             resource={media}
+            fill
+            priority
             imgClassName="w-full h-full object-cover opacity-40 scale-110 origin-top"
           />
         )}

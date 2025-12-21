@@ -12,7 +12,7 @@ import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import type { Header, Footer } from '@/payload-types'
+import type { Header, Footer, SiteSetting } from '@/payload-types'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -23,6 +23,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // Fetch header and footer data from Payload
   const headerData: Header = await getCachedGlobal('header', 1)()
   const footerData: Footer = await getCachedGlobal('footer', 1)()
+  const siteSettings: SiteSetting = await getCachedGlobal('site-settings', 1)()
 
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
@@ -48,7 +49,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          <YCLayoutWrapper headerData={headerData} footerData={footerData}>
+          <YCLayoutWrapper
+            headerData={headerData}
+            footerData={footerData}
+            enableLoader={siteSettings?.enableLoader}
+          >
             {children}
           </YCLayoutWrapper>
         </Providers>

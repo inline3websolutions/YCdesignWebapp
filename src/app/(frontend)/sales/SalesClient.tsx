@@ -133,7 +133,7 @@ const SalesClient: React.FC<SalesClientProps> = ({ bikes }) => {
 
                   {/* Price Overlay */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                    <span className="text-2xl font-syne font-bold text-white">{bike.price}</span>
+                    <span className="text-2xl font-syne font-bold text-white">₹ {bike.price}</span>
                   </div>
                 </div>
 
