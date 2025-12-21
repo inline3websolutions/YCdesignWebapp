@@ -102,7 +102,7 @@ export const YCInstagramGridBlock: React.FC<Props> = (props) => {
         </div>
 
         {/* Instagram Grid */}
-        <div className="ig-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 perspective-1000">
+        <div className="ig-grid grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 perspective-1000">
           {instagramPosts?.map((post) => (
             <a
               key={post.id}
