@@ -16,6 +16,7 @@ import { YCHero } from '@/blocks/YCHero/config'
 import { YCPortfolioGrid } from '@/blocks/YCPortfolioGrid/config'
 import { YCTestimonials } from '@/blocks/YCTestimonials/config'
 import { YCContact } from '@/blocks/YCContact/config'
+import { YCInstagramGrid } from '@/blocks/YCInstagramGrid/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -96,6 +97,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 YCPortfolioGrid,
                 YCTestimonials,
                 YCContact,
+                YCInstagramGrid,
               ],
               required: true,
               admin: {

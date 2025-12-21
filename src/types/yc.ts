@@ -38,7 +38,7 @@ export interface SaleBike {
   slug?: string
 }
 
-// Helper function to get manufacturer name from relationship
+// Helper function to get manufacturer name from relationship (exported for use in other files)
 export function getManufacturerName(
   manufacturer: string | number | Manufacturer | null | undefined,
 ): string {

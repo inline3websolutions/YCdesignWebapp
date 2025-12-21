@@ -405,6 +405,20 @@ export interface Page {
         blockName?: string | null;
         blockType: 'ycContact';
       }
+    | {
+        instagramPosts?:
+          | {
+              image: string | Media;
+              likes: number;
+              comments: number;
+              postUrl: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycInstagramGrid';
+      }
   )[];
   meta?: {
     title?: string | null;
@@ -1687,6 +1701,21 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               subheading?: T;
               whatsappLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ycInstagramGrid?:
+          | T
+          | {
+              instagramPosts?:
+                | T
+                | {
+                    image?: T;
+                    likes?: T;
+                    comments?: T;
+                    postUrl?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };

@@ -16,6 +16,7 @@ import { YCHeroBlock } from '@/blocks/YCHero/Component'
 import { YCPortfolioGridBlock } from '@/blocks/YCPortfolioGrid/Component'
 import { YCTestimonialsBlock } from '@/blocks/YCTestimonials/Component'
 import { YCContactBlock } from '@/blocks/YCContact/Component'
+import { YCInstagramGridBlock } from '@/blocks/YCInstagramGrid/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -32,6 +33,7 @@ const blockComponents = {
   ycPortfolioGrid: YCPortfolioGridBlock,
   ycTestimonials: YCTestimonialsBlock,
   ycContact: YCContactBlock,
+  ycInstagramGrid: YCInstagramGridBlock,
 }
 
 export const RenderBlocks: React.FC<{

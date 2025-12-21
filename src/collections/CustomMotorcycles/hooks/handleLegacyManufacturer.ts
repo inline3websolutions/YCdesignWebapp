@@ -8,7 +8,6 @@ import type { CollectionAfterReadHook } from 'payload'
  * and if so, stores it in manufacturerLegacy for frontend display
  * while clearing the manufacturer field to avoid MongoDB casting errors.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const handleLegacyManufacturer: CollectionAfterReadHook = async ({ doc }) => {
   if (!doc) return doc
 
