@@ -8,7 +8,8 @@ export interface Project {
   engine?: string
   image: ImageType
   gallery: ImageType[]
-  description: string
+  description: any // Rich Text content
+  descriptionSummary: string
   beforeImage?: ImageType
   afterImage?: ImageType
   clientLocation?: string
@@ -38,7 +39,8 @@ export interface SaleBike {
   year: string
   engine: string
   mileage: string
-  description: string
+  description: any // Rich Text content
+  descriptionSummary: string
   mainImage: ImageType
   gallery: ImageType[]
   features: string[]
@@ -91,7 +93,8 @@ export function restoredMotoToProject(moto: RestoredMoto): Project {
     engine: getManufacturerName(moto.manufacturer),
     image: getImageData(heroImage),
     gallery: images?.map(getImageData) || [],
-    description: getPlainTextFromRichText(moto.content),
+    description: moto.content,
+    descriptionSummary: getPlainTextFromRichText(moto.content),
     beforeImage: images?.[0] ? getImageData(images[0]) : undefined,
     afterImage: heroImage ? getImageData(heroImage) : undefined,
     clientLocation: 'India',
@@ -112,7 +115,8 @@ export function customMotoToProject(moto: CustomMotorcycle): Project {
     engine: getManufacturerName(moto.manufacturer),
     image: getImageData(heroImage),
     gallery: images?.map(getImageData) || [],
-    description: getPlainTextFromRichText(moto.content),
+    description: moto.content,
+    descriptionSummary: getPlainTextFromRichText(moto.content),
     beforeImage: images?.[0] ? getImageData(images[0]) : undefined,
     afterImage: heroImage ? getImageData(heroImage) : undefined,
     clientLocation: 'India',
@@ -122,7 +126,7 @@ export function customMotoToProject(moto: CustomMotorcycle): Project {
 
 // Helper to extract plain text from Lexical rich text
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getPlainTextFromRichText(content: any): string {
+export function getPlainTextFromRichText(content: any): string {
   if (!content || !content.root || !content.root.children) {
     return ''
   }
@@ -138,7 +142,7 @@ function getPlainTextFromRichText(content: any): string {
     return ''
   }
 
-  return content.root.children.map(extractText).join(' ').trim().substring(0, 300)
+  return content.root.children.map(extractText).join(' ').trim()
 }
 
 // Static testimonials data
@@ -192,7 +196,8 @@ export function saleToSaleBike(sale: Sale): SaleBike {
     numberOfOwners: sale.numberOfOwners || undefined,
     registrationDate: sale.registrationDate || undefined,
     mileage: sale.mileage,
-    description: getPlainTextFromRichText(sale.description),
+    description: sale.description,
+    descriptionSummary: getPlainTextFromRichText(sale.description),
     mainImage: getImageData(mainImage),
     gallery: gallery?.map(getImageData) || [],
     features,

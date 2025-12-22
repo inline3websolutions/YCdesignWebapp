@@ -149,7 +149,7 @@ const SalesClient: React.FC<SalesClientProps> = ({ bikes }) => {
                     <span>{bike.mileage}</span>
                   </div>
                   <p className="text-zinc-600 dark:text-zinc-500 text-sm font-rubik mt-1 line-clamp-2">
-                    {bike.description.substring(0, 120)}...
+                    {bike.descriptionSummary.substring(0, 120)}...
                   </p>
                 </div>
               </Link>

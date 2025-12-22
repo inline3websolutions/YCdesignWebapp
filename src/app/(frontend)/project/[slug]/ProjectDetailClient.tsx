@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { ArrowLeft, ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react'
 import gsap from 'gsap'
 import type { Project } from '@/types/yc'
+import RichText from '@/components/RichText'
 
 interface ProjectDetailClientProps {
   project: Project
@@ -248,9 +249,7 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
                 About This Build
               </h3>
               <div className="prose prose-zinc dark:prose-invert max-w-none">
-                <p className="text-zinc-600 dark:text-zinc-400 font-rubik leading-relaxed">
-                  {project.description}
-                </p>
+                <RichText data={project.description} />
               </div>
             </div>
 

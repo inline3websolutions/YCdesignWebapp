@@ -302,7 +302,7 @@ const PortfolioClient: React.FC<PortfolioClientProps> = ({ projects }) => {
                     {project.title}
                   </h3>
                   <p className="text-zinc-600 dark:text-zinc-500 text-sm font-rubik mt-1 line-clamp-2">
-                    {project.description.substring(0, 100)}...
+                    {project.descriptionSummary.substring(0, 100)}...
                   </p>
                 </div>
               </Link>

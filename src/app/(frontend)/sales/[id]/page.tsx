@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${bike.title} | For Sale | YC Design`,
-    description: `${bike.year} ${bike.title} - ${bike.engine}. ${bike.description.substring(0, 150)}...`,
+    description: `${bike.year} ${bike.title} - ${bike.engine}. ${bike.descriptionSummary.substring(0, 150)}...`,
   }
 }
 

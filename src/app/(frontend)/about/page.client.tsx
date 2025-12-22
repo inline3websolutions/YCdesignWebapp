@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react'
 import { ArrowRight, Wrench, Shield, Zap } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { About, Media } from '@/payload-types'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import gsap from 'gsap'
@@ -132,10 +133,13 @@ export const AboutClient: React.FC<{ data: About }> = ({ data }) => {
       >
         {/* Parallax Background */}
         <div className="hero-bg absolute inset-0 z-0">
-          <img
+          <Image
             src={getImageUrl(hero.background)}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
             alt="Workshop Background"
+            priority
+            sizes="100vw"
           />
           {/* Texture Overlays */}
           <div className="absolute inset-0 bg-gradient-to-b from-yc-dark/80 via-transparent to-yc-dark z-10"></div>
@@ -209,10 +213,12 @@ export const AboutClient: React.FC<{ data: About }> = ({ data }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center mb-32">
           <div className="anim-up relative aspect-[4/5] overflow-hidden rounded-sm border border-zinc-200 dark:border-white/10 shadow-2xl">
-            <img
+            <Image
               src={getImageUrl(story.image1)}
-              className="w-full h-full object-cover contrast-110"
+              fill
+              className="object-cover contrast-110"
               alt="Yogi Chhabria"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute inset-0 bg-yc-yellow/10 mix-blend-multiply"></div>
             {/* Decorative Corner */}
@@ -255,10 +261,12 @@ export const AboutClient: React.FC<{ data: About }> = ({ data }) => {
           </div>
 
           <div className="anim-up order-1 lg:order-2 relative aspect-video overflow-hidden rounded-sm border border-zinc-200 dark:border-white/10 shadow-xl">
-            <img
+            <Image
               src={getImageUrl(story.image2)}
-              className="w-full h-full object-cover contrast-110"
+              fill
+              className="object-cover contrast-110"
               alt="Workshop Environment"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute top-4 right-4 text-white/20 font-mono text-[8px] uppercase tracking-widest">
               {story.image2Caption}
@@ -309,12 +317,18 @@ export const AboutClient: React.FC<{ data: About }> = ({ data }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
           <div className="anim-up grid grid-cols-2 gap-4 relative">
             {livingTheLife.images?.map((img: any, idx: number) => (
-              <img
+              <div
                 key={idx}
-                src={getImageUrl(img.image)}
-                className={`w-full aspect-[3/4] object-cover brightness-75 rounded-sm ${idx === 1 ? 'translate-y-12' : ''}`}
-                alt="Dirt Racing"
-              />
+                className={`relative w-full aspect-[3/4] rounded-sm overflow-hidden ${idx === 1 ? 'translate-y-12' : ''}`}
+              >
+                <Image
+                  src={getImageUrl(img.image)}
+                  fill
+                  className="object-cover brightness-75"
+                  alt="Dirt Racing"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             ))}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-yc-yellow/20 rounded-full animate-pulse"></div>
           </div>

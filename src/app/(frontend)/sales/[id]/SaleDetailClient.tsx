@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { ArrowLeft, ChevronLeft, ChevronRight, X, ZoomIn, Check, Phone } from 'lucide-react'
 import gsap from 'gsap'
 import type { SaleBike } from '@/types/yc'
+import RichText from '@/components/RichText'
 
 interface SaleDetailClientProps {
   bike: SaleBike
@@ -232,9 +233,7 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
               <h3 className="text-lg font-syne font-bold text-zinc-900 dark:text-white mb-3">
                 About This Bike
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400 font-rubik leading-relaxed">
-                {bike.description}
-              </p>
+              <RichText data={bike.description} />
             </div>
 
             {/* Features */}
@@ -260,13 +259,17 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
             {/* CTA */}
             {bike.status === 'Available' && (
               <div className="detail-content pt-6">
-                <Link
-                  href="/#contact"
+                <a
+                  href={`https://wa.me/919820109654?text=${encodeURIComponent(
+                    `Hi YC Design, I am interested in the ${bike.title} listed on your website. I would like to know more about it.`,
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-yc-yellow text-black font-syne font-bold uppercase tracking-wider rounded-sm hover:bg-yellow-400 transition-colors"
                 >
                   <Phone size={20} />
                   Inquire About This Bike
-                </Link>
+                </a>
               </div>
             )}
 
