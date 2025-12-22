@@ -1,4 +1,12 @@
-import type { Media, RestoredMoto, CustomMotorcycle, Manufacturer, Sale } from '@/payload-types'
+import type {
+  Media,
+  RestoredMoto,
+  CustomMotorcycle,
+  Manufacturer,
+  Sale,
+  Spare,
+} from '@/payload-types'
+import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 
 export interface Project {
   id: string
@@ -8,7 +16,7 @@ export interface Project {
   engine?: string
   image: ImageType
   gallery: ImageType[]
-  description: any // Rich Text content
+  description: DefaultTypedEditorState
   descriptionSummary: string
   beforeImage?: ImageType
   afterImage?: ImageType
@@ -32,6 +40,7 @@ export interface Testimonial {
 }
 
 export interface SaleBike {
+  type: 'bike'
   id: string
   title: string
   price: string
@@ -39,7 +48,7 @@ export interface SaleBike {
   year: string
   engine: string
   mileage: string
-  description: any // Rich Text content
+  description: DefaultTypedEditorState
   descriptionSummary: string
   mainImage: ImageType
   gallery: ImageType[]
@@ -49,6 +58,25 @@ export interface SaleBike {
   numberOfOwners?: string
   registrationDate?: string
 }
+
+export interface SpareItem {
+  type: 'spare'
+  id: string
+  title: string
+  price: string
+  status: 'Available' | 'Sold' | 'Reserved'
+  condition: 'New' | 'Used' | 'Refurbished'
+  partCategory: 'Engine' | 'Bodywork' | 'Electrical' | 'Suspension' | 'Accessories' | 'Other'
+  compatibility?: string
+  description: DefaultTypedEditorState
+  descriptionSummary: string
+  mainImage: ImageType
+  gallery: ImageType[]
+  slug?: string
+  manufacturer: string
+}
+
+export type SaleItem = SaleBike | SpareItem
 
 // Helper function to get manufacturer name from relationship (exported for use in other files)
 export function getManufacturerName(
@@ -186,6 +214,7 @@ export function saleToSaleBike(sale: Sale): SaleBike {
   const features = sale.features?.map((f) => f.feature) || []
 
   return {
+    type: 'bike',
     id: String(sale.id),
     title: sale.title,
     price: sale.price,
@@ -202,5 +231,49 @@ export function saleToSaleBike(sale: Sale): SaleBike {
     gallery: gallery?.map(getImageData) || [],
     features,
     slug: sale.slug || undefined,
+  }
+}
+
+// Helper function to convert Payload Spare to SpareItem
+export function spareToSpareItem(spare: Spare): SpareItem {
+  const mainImage = spare.mainImage as Media | undefined
+  const gallery = spare.gallery as Media[] | undefined
+
+  const statusMap: Record<string, SpareItem['status']> = {
+    available: 'Available',
+    reserved: 'Reserved',
+    sold: 'Sold',
+  }
+
+  const conditionMap: Record<string, SpareItem['condition']> = {
+    new: 'New',
+    used: 'Used',
+    refurbished: 'Refurbished',
+  }
+
+  const categoryMap: Record<string, SpareItem['partCategory']> = {
+    engine: 'Engine',
+    bodywork: 'Bodywork',
+    electrical: 'Electrical',
+    suspension: 'Suspension',
+    accessories: 'Accessories',
+    other: 'Other',
+  }
+
+  return {
+    type: 'spare',
+    id: String(spare.id),
+    title: spare.title,
+    price: spare.price,
+    status: statusMap[spare.status] || 'Available',
+    condition: conditionMap[spare.condition] || 'Used',
+    partCategory: categoryMap[spare.partCategory] || 'Other',
+    compatibility: spare.compatibility || undefined,
+    description: spare.description,
+    descriptionSummary: getPlainTextFromRichText(spare.description),
+    mainImage: getImageData(mainImage),
+    gallery: gallery?.map(getImageData) || [],
+    slug: spare.slug || undefined,
+    manufacturer: getManufacturerName(spare.manufacturer),
   }
 }

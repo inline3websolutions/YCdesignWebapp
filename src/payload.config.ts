@@ -13,6 +13,7 @@ import { Users } from './collections/Users'
 import { RestoredMoto } from './collections/RestoredMoto'
 import { CustomMotorcycles } from './collections/CustomMotorcycles'
 import { Sales } from './collections/Sales'
+import { Spares } from './collections/Spares'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { Manufacturers } from './collections/Manufacturers'
 import { About } from './About/config'
@@ -84,6 +85,7 @@ export default buildConfig({
     RestoredMoto,
     CustomMotorcycles,
     Sales,
+    Spares,
     ContactSubmissions,
     Manufacturers,
   ],

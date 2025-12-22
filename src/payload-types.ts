@@ -75,6 +75,7 @@ export interface Config {
     'restored-moto': RestoredMoto;
     'custom-motorcycles': CustomMotorcycle;
     sales: Sale;
+    spares: Spare;
     'contact-submissions': ContactSubmission;
     manufacturers: Manufacturer;
     redirects: Redirect;
@@ -102,6 +103,7 @@ export interface Config {
     'restored-moto': RestoredMotoSelect<false> | RestoredMotoSelect<true>;
     'custom-motorcycles': CustomMotorcyclesSelect<false> | CustomMotorcyclesSelect<true>;
     sales: SalesSelect<false> | SalesSelect<true>;
+    spares: SparesSelect<false> | SparesSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     manufacturers: ManufacturersSelect<false> | ManufacturersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -1212,6 +1214,57 @@ export interface Sale {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "spares".
+ */
+export interface Spare {
+  id: string;
+  title: string;
+  manufacturer: string | Manufacturer;
+  price: string;
+  status: 'available' | 'reserved' | 'sold';
+  condition: 'new' | 'used' | 'refurbished';
+  partCategory: 'engine' | 'bodywork' | 'electrical' | 'suspension' | 'accessories' | 'other';
+  /**
+   * List models this part fits (e.g., Royal Enfield Classic 350, Bullet 500)
+   */
+  compatibility?: string | null;
+  mainImage: string | Media;
+  gallery?: (string | Media)[] | null;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-submissions".
  */
 export interface ContactSubmission {
@@ -1457,6 +1510,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'sales';
         value: string | Sale;
+      } | null)
+    | ({
+        relationTo: 'spares';
+        value: string | Spare;
       } | null)
     | ({
         relationTo: 'contact-submissions';
@@ -2135,6 +2192,35 @@ export interface SalesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "spares_select".
+ */
+export interface SparesSelect<T extends boolean = true> {
+  title?: T;
+  manufacturer?: T;
+  price?: T;
+  status?: T;
+  condition?: T;
+  partCategory?: T;
+  compatibility?: T;
+  mainImage?: T;
+  gallery?: T;
+  description?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-submissions_select".
  */
 export interface ContactSubmissionsSelect<T extends boolean = true> {
@@ -2786,6 +2872,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'sales';
           value: string | Sale;
+        } | null)
+      | ({
+          relationTo: 'spares';
+          value: string | Spare;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

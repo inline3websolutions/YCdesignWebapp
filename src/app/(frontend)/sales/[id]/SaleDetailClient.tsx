@@ -5,19 +5,19 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, ChevronLeft, ChevronRight, X, ZoomIn, Check, Phone } from 'lucide-react'
 import gsap from 'gsap'
-import type { SaleBike } from '@/types/yc'
+import type { SaleItem } from '@/types/yc'
 import RichText from '@/components/RichText'
 
 interface SaleDetailClientProps {
-  bike: SaleBike
+  item: SaleItem
 }
 
-const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
+const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ item }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const contentRef = useRef<HTMLDivElement>(null)
 
-  const allImages = [bike.mainImage, ...bike.gallery.filter((img) => img !== bike.mainImage)]
+  const allImages = [item.mainImage, ...item.gallery.filter((img) => img !== item.mainImage)]
 
   useEffect(() => {
     if (!contentRef.current) return
@@ -57,7 +57,7 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
     setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length)
   }
 
-  const getStatusStyles = (status: SaleBike['status']) => {
+  const getStatusStyles = (status: SaleItem['status']) => {
     switch (status) {
       case 'Available':
         return 'bg-green-500/20 text-green-400 border-green-500/30'
@@ -91,7 +91,7 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
             <div className="relative bg-zinc-200 dark:bg-zinc-800 rounded-sm overflow-hidden border border-zinc-200 dark:border-zinc-800">
               <Image
                 src={allImages[currentImageIndex].url}
-                alt={bike.title}
+                alt={item.title}
                 width={allImages[currentImageIndex].width}
                 height={allImages[currentImageIndex].height}
                 className="w-full h-auto object-contain" // Changed to object-contain and added w-full h-auto
@@ -154,96 +154,139 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
             {/* Status & Price */}
             <div className="flex items-start justify-between">
               <span
-                className={`detail-meta px-4 py-2 text-sm font-syne font-bold uppercase tracking-wider border rounded-sm ${getStatusStyles(bike.status)}`}
+                className={`detail-meta px-4 py-2 text-sm font-syne font-bold uppercase tracking-wider border rounded-sm ${getStatusStyles(item.status)}`}
               >
-                {bike.status}
+                {item.status}
               </span>
               <div className="detail-meta text-right">
-                <span className="text-4xl font-syne font-bold text-yc-yellow">₹ {bike.price}</span>
+                <span className="text-4xl font-syne font-bold text-yc-yellow">₹ {item.price}</span>
               </div>
             </div>
 
             {/* Title */}
             <h1 className="detail-title text-4xl md:text-5xl lg:text-6xl font-syne font-bold text-zinc-900 dark:text-white transition-colors duration-500">
-              {bike.title}
+              {item.title}
             </h1>
 
             {/* Specs Grid */}
             <div className="detail-meta grid grid-cols-2 md:grid-cols-3 gap-6 py-6 border-y border-zinc-200 dark:border-zinc-800">
-              <div>
-                <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
-                  Manufacturer
-                </span>
-                <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
-                  {bike.manufacturer}
-                </p>
-              </div>
-              <div>
-                <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
-                  Year
-                </span>
-                <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
-                  {bike.year}
-                </p>
-              </div>
-              <div>
-                <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
-                  Engine
-                </span>
-                <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
-                  {bike.engine}
-                </p>
-              </div>
-              <div>
-                <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
-                  Mileage
-                </span>
-                <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
-                  {bike.mileage}
-                </p>
-              </div>
-              {bike.numberOfOwners && (
-                <div>
-                  <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
-                    Owners
-                  </span>
-                  <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
-                    {bike.numberOfOwners}
-                  </p>
-                </div>
-              )}
-              {bike.registrationDate && (
-                <div>
-                  <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
-                    Registration
-                  </span>
-                  <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
-                    {new Date(bike.registrationDate).toLocaleDateString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}
-                  </p>
-                </div>
+              {item.type === 'bike' ? (
+                <>
+                  <div>
+                    <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                      Manufacturer
+                    </span>
+                    <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                      {item.manufacturer}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                      Year
+                    </span>
+                    <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                      {item.year}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                      Engine
+                    </span>
+                    <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                      {item.engine}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                      Mileage
+                    </span>
+                    <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                      {item.mileage}
+                    </p>
+                  </div>
+                  {item.numberOfOwners && (
+                    <div>
+                      <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                        Owners
+                      </span>
+                      <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                        {item.numberOfOwners}
+                      </p>
+                    </div>
+                  )}
+                  {item.registrationDate && (
+                    <div>
+                      <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                        Registration
+                      </span>
+                      <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                        {new Date(item.registrationDate).toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div>
+                    <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                      Manufacturer
+                    </span>
+                    <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                      {item.manufacturer}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                      Category
+                    </span>
+                    <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                      {item.partCategory}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                      Condition
+                    </span>
+                    <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                      {item.condition}
+                    </p>
+                  </div>
+                </>
               )}
             </div>
+
+            {/* Compatibility for Spares */}
+            {item.type === 'spare' && item.compatibility && (
+              <div className="detail-content">
+                <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block mb-1">
+                  Compatible with
+                </span>
+                <p className="text-lg font-syne text-zinc-900 dark:text-white">
+                  {item.compatibility}
+                </p>
+              </div>
+            )}
 
             {/* Description */}
             <div className="detail-content">
               <h3 className="text-lg font-syne font-bold text-zinc-900 dark:text-white mb-3">
-                About This Bike
+                {item.type === 'bike' ? 'About This Bike' : 'About This Part'}
               </h3>
-              <RichText data={bike.description} />
+              <RichText data={item.description} />
             </div>
 
-            {/* Features */}
-            {bike.features.length > 0 && (
+            {/* Features (Bikes only usually, but Spares don't have it in types yet) */}
+            {item.type === 'bike' && item.features.length > 0 && (
               <div className="detail-content">
                 <h3 className="text-lg font-syne font-bold text-zinc-900 dark:text-white mb-4">
                   Features & Modifications
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  {bike.features.map((feature, idx) => (
+                  {item.features.map((feature, idx) => (
                     <div
                       key={idx}
                       className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 font-rubik"
@@ -257,23 +300,23 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
             )}
 
             {/* CTA */}
-            {bike.status === 'Available' && (
+            {item.status === 'Available' && (
               <div className="detail-content pt-6">
                 <a
                   href={`https://wa.me/919820109654?text=${encodeURIComponent(
-                    `Hi YC Design, I am interested in the ${bike.title} listed on your website. I would like to know more about it.`,
+                    `Hi YC Design, I am interested in the ${item.title} listed on your website. I would like to know more about it.`,
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-yc-yellow text-black font-syne font-bold uppercase tracking-wider rounded-sm hover:bg-yellow-400 transition-colors"
                 >
                   <Phone size={20} />
-                  Inquire About This Bike
+                  Inquire About This {item.type === 'bike' ? 'Bike' : 'Item'}
                 </a>
               </div>
             )}
 
-            {bike.status === 'Reserved' && (
+            {item.status === 'Reserved' && (
               <div className="detail-content pt-6">
                 <div className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-zinc-200 dark:bg-zinc-800 text-zinc-500 font-syne font-bold uppercase tracking-wider rounded-sm cursor-not-allowed">
                   Currently Reserved
@@ -281,17 +324,19 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
               </div>
             )}
 
-            {bike.status === 'Sold' && (
+            {item.status === 'Sold' && (
               <div className="detail-content pt-6 text-center">
                 <div className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-zinc-200 dark:bg-zinc-800 text-zinc-500 font-syne font-bold uppercase tracking-wider rounded-sm cursor-not-allowed mb-4">
                   Sold
                 </div>
-                <p className="text-zinc-500 font-rubik text-sm">
-                  Like this build?{' '}
-                  <Link href="/#contact" className="text-yc-yellow hover:underline">
-                    Commission a similar one
-                  </Link>
-                </p>
+                {item.type === 'bike' && (
+                  <p className="text-zinc-500 font-rubik text-sm">
+                    Like this build?{' '}
+                    <Link href="/#contact" className="text-yc-yellow hover:underline">
+                      Commission a similar one
+                    </Link>
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -327,7 +372,7 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
           >
             <Image
               src={allImages[currentImageIndex].url}
-              alt={bike.title}
+              alt={item.title}
               fill
               className="object-contain"
               unoptimized
