@@ -166,7 +166,7 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
             </h1>
 
             {/* Specs Grid */}
-            <div className="detail-meta grid grid-cols-2 md:grid-cols-4 gap-6 py-6 border-y border-zinc-200 dark:border-zinc-800">
+            <div className="detail-meta grid grid-cols-2 md:grid-cols-3 gap-6 py-6 border-y border-zinc-200 dark:border-zinc-800">
               <div>
                 <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
                   Manufacturer
@@ -199,6 +199,30 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
                   {bike.mileage}
                 </p>
               </div>
+              {bike.numberOfOwners && (
+                <div>
+                  <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                    Owners
+                  </span>
+                  <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                    {bike.numberOfOwners}
+                  </p>
+                </div>
+              )}
+              {bike.registrationDate && (
+                <div>
+                  <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                    Registration
+                  </span>
+                  <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                    {new Date(bike.registrationDate).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                    })}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Description */}

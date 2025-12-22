@@ -138,6 +138,28 @@ export const Sales: CollectionConfig<'sales'> = {
               ],
             },
             {
+              type: 'row',
+              fields: [
+                {
+                  name: 'numberOfOwners',
+                  type: 'text',
+                  label: 'Number of Owners',
+                  admin: {
+                    width: '50%',
+                    placeholder: '1st Owner',
+                  },
+                },
+                {
+                  name: 'registrationDate',
+                  type: 'date',
+                  label: 'Registration Date',
+                  admin: {
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
               name: 'mainImage',
               type: 'upload',
               relationTo: 'media',

@@ -37,6 +37,8 @@ export interface SaleBike {
   features: string[]
   slug?: string
   manufacturer: string
+  numberOfOwners?: string
+  registrationDate?: string
 }
 
 // Helper function to get manufacturer name from relationship (exported for use in other files)
@@ -164,6 +166,8 @@ export function saleToSaleBike(sale: Sale): SaleBike {
     year: String(sale.year),
     engine: sale.engine,
     manufacturer: getManufacturerName(sale.manufacturer),
+    numberOfOwners: sale.numberOfOwners || undefined,
+    registrationDate: sale.registrationDate || undefined,
     mileage: sale.mileage,
     description: getPlainTextFromRichText(sale.description),
     mainImage: mainImage?.url || '/placeholder.jpg',

@@ -12,6 +12,7 @@ import { YCAbout } from '@/blocks/YCAbout/config'
 import { YCServices } from '@/blocks/YCServices/config'
 import { YCRestoredGallery } from '@/blocks/YCRestoredGallery/config'
 import { YCCustomFeature } from '@/blocks/YCCustomFeature/config'
+import { YCHeroSlider } from '@/blocks/YCHeroSlider/config'
 import { YCHero } from '@/blocks/YCHero/config'
 import { YCPortfolioGrid } from '@/blocks/YCPortfolioGrid/config'
 import { YCTestimonials } from '@/blocks/YCTestimonials/config'
@@ -94,6 +95,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 YCRestoredGallery,
                 YCCustomFeature,
                 YCHero,
+                YCHeroSlider,
                 YCPortfolioGrid,
                 YCTestimonials,
                 YCContact,

@@ -13,6 +13,7 @@ import { YCServicesBlock } from '@/blocks/YCServices/Component'
 import { YCRestoredGalleryBlock } from '@/blocks/YCRestoredGallery/Component'
 import { YCCustomFeatureBlock } from '@/blocks/YCCustomFeature/Component'
 import { YCHeroBlock } from '@/blocks/YCHero/Component'
+import { YCHeroSliderBlock } from '@/blocks/YCHeroSlider/Component'
 import { YCPortfolioGridBlock } from '@/blocks/YCPortfolioGrid/Component'
 import { YCTestimonialsBlock } from '@/blocks/YCTestimonials/Component'
 import { YCContactBlock } from '@/blocks/YCContact/Component'
@@ -30,6 +31,7 @@ const blockComponents = {
   ycRestoredGallery: YCRestoredGalleryBlock,
   ycCustomFeature: YCCustomFeatureBlock,
   ycHero: YCHeroBlock,
+  ycHeroSlider: YCHeroSliderBlock,
   ycPortfolioGrid: YCPortfolioGridBlock,
   ycTestimonials: YCTestimonialsBlock,
   ycContact: YCContactBlock,

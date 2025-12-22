@@ -365,6 +365,22 @@ export interface Page {
         blockType: 'ycHero';
       }
     | {
+        slides: {
+          title?: string | null;
+          highlight?: string | null;
+          subtitle?: string | null;
+          description?: string | null;
+          image: string | Media;
+          mobileImage: string | Media;
+          coords?: string | null;
+          tag?: string | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ycHeroSlider';
+      }
+    | {
         subtitle?: string | null;
         title: string;
         /**
@@ -1149,6 +1165,8 @@ export interface Sale {
   year: number;
   engine: string;
   mileage: string;
+  numberOfOwners?: string | null;
+  registrationDate?: string | null;
   mainImage: string | Media;
   gallery?: (string | Media)[] | null;
   description: {
@@ -1671,6 +1689,25 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        ycHeroSlider?:
+          | T
+          | {
+              slides?:
+                | T
+                | {
+                    title?: T;
+                    highlight?: T;
+                    subtitle?: T;
+                    description?: T;
+                    image?: T;
+                    mobileImage?: T;
+                    coords?: T;
+                    tag?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         ycPortfolioGrid?:
           | T
           | {
@@ -2069,6 +2106,8 @@ export interface SalesSelect<T extends boolean = true> {
   year?: T;
   engine?: T;
   mileage?: T;
+  numberOfOwners?: T;
+  registrationDate?: T;
   mainImage?: T;
   gallery?: T;
   description?: T;

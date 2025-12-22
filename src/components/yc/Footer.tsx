@@ -13,6 +13,11 @@ interface YCFooterProps {
 
 const YCFooter: React.FC<YCFooterProps> = ({ data }) => {
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -174,9 +179,9 @@ const YCFooter: React.FC<YCFooterProps> = ({ data }) => {
               className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors"
               aria-label="Toggle Dark Mode"
             >
-              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+              {mounted && theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
               <span className="uppercase font-bold tracking-wider text-[10px]">
-                {theme === 'dark' ? 'Light' : 'Dark'}
+                {mounted && theme === 'dark' ? 'Light' : 'Dark'}
               </span>
             </button>
 
