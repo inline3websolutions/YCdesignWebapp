@@ -228,6 +228,16 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ item }) => {
                       </p>
                     </div>
                   )}
+                  {item.registrationState && (
+                    <div>
+                      <span className="text-xs text-zinc-500 uppercase tracking-wider font-rubik block">
+                        Reg. State
+                      </span>
+                      <p className="text-xl font-syne font-bold text-zinc-900 dark:text-white mt-1">
+                        {item.registrationState}
+                      </p>
+                    </div>
+                  )}
                 </>
               ) : (
                 <>

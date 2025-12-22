@@ -36,7 +36,7 @@ export const YCInstagramGridBlock: React.FC<Props> = (props) => {
       // Grid Items Animation
       gsap.fromTo(
         '.ig-item',
-        { opacity: 0, scale: 0.8, y: 40, rotationY: 15 },
+        { opacity: 0, scale: 0.9, y: 20, rotationY: 15 },
         {
           opacity: 1,
           scale: 1,
@@ -109,7 +109,7 @@ export const YCInstagramGridBlock: React.FC<Props> = (props) => {
               href={post.postUrl || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="ig-item group relative aspect-square overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/50 hover:border-yc-yellow/50 transition-all duration-700 cursor-pointer block"
+              className="ig-item group relative aspect-[4/5] overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/50 hover:border-yc-yellow/50 transition-all duration-700 cursor-pointer block"
             >
               {typeof post.image === 'object' && post.image !== null ? (
                 <Media

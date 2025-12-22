@@ -1171,6 +1171,49 @@ export interface Sale {
   mileage: string;
   numberOfOwners?: string | null;
   registrationDate?: string | null;
+  /**
+   * State/UT where the bike is registered
+   */
+  registrationState?:
+    | (
+        | 'AN'
+        | 'AP'
+        | 'AR'
+        | 'AS'
+        | 'BR'
+        | 'CH'
+        | 'CG'
+        | 'DD'
+        | 'DL'
+        | 'GA'
+        | 'GJ'
+        | 'HR'
+        | 'HP'
+        | 'JK'
+        | 'JH'
+        | 'KA'
+        | 'KL'
+        | 'LA'
+        | 'LD'
+        | 'MP'
+        | 'MH'
+        | 'MN'
+        | 'ML'
+        | 'MZ'
+        | 'NL'
+        | 'OD'
+        | 'PY'
+        | 'PB'
+        | 'RJ'
+        | 'SK'
+        | 'TN'
+        | 'TG'
+        | 'TR'
+        | 'UP'
+        | 'UK'
+        | 'WB'
+      )
+    | null;
   mainImage: string | Media;
   gallery?: (string | Media)[] | null;
   description: {
@@ -2167,6 +2210,7 @@ export interface SalesSelect<T extends boolean = true> {
   mileage?: T;
   numberOfOwners?: T;
   registrationDate?: T;
+  registrationState?: T;
   mainImage?: T;
   gallery?: T;
   description?: T;

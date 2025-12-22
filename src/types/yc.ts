@@ -57,6 +57,7 @@ export interface SaleBike {
   manufacturer: string
   numberOfOwners?: string
   registrationDate?: string
+  registrationState?: string
 }
 
 export interface SpareItem {
@@ -224,6 +225,7 @@ export function saleToSaleBike(sale: Sale): SaleBike {
     manufacturer: getManufacturerName(sale.manufacturer),
     numberOfOwners: sale.numberOfOwners || undefined,
     registrationDate: sale.registrationDate || undefined,
+    registrationState: sale.registrationState || undefined,
     mileage: sale.mileage,
     description: sale.description,
     descriptionSummary: getPlainTextFromRichText(sale.description),
