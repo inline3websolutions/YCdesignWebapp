@@ -276,7 +276,7 @@ const PortfolioClient: React.FC<PortfolioClientProps> = ({ projects }) => {
                 <div className="relative overflow-hidden bg-zinc-200 dark:bg-zinc-800 aspect-[4/3] mb-5 border border-zinc-200 dark:border-zinc-800 group-hover:border-yc-yellow/50 transition-all duration-500 rounded-sm">
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all z-10" />
                   <Image
-                    src={project.image}
+                    src={project.image.url}
                     alt={project.title}
                     fill
                     className="object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out grayscale-[0.3] group-hover:grayscale-0"

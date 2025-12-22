@@ -87,12 +87,14 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
           {/* Left Column - Gallery */}
           <div className="space-y-6">
             {/* Main Image Display */}
-            <div className="relative aspect-[4/3] bg-zinc-200 dark:bg-zinc-800 rounded-sm overflow-hidden border border-zinc-200 dark:border-zinc-800">
+            <div className="relative bg-zinc-200 dark:bg-zinc-800 rounded-sm overflow-hidden border border-zinc-200 dark:border-zinc-800">
               <Image
-                src={allImages[currentImageIndex]}
+                src={allImages[currentImageIndex].url}
                 alt={bike.title}
-                fill
-                className="object-cover"
+                width={allImages[currentImageIndex].width}
+                height={allImages[currentImageIndex].height}
+                className="w-full h-auto object-contain" // Changed to object-contain and added w-full h-auto
+                priority
                 unoptimized
               />
               <button
@@ -134,7 +136,7 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
                     }`}
                   >
                     <Image
-                      src={img}
+                      src={img.url}
                       alt={`Thumbnail ${idx + 1}`}
                       fill
                       className="object-cover"
@@ -321,7 +323,7 @@ const SaleDetailClient: React.FC<SaleDetailClientProps> = ({ bike }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={allImages[currentImageIndex]}
+              src={allImages[currentImageIndex].url}
               alt={bike.title}
               fill
               className="object-contain"

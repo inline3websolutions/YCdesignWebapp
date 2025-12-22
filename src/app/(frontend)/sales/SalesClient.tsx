@@ -110,7 +110,7 @@ const SalesClient: React.FC<SalesClientProps> = ({ bikes }) => {
               <Link href={getBikeLink(bike)} className="block">
                 <div className="relative overflow-hidden bg-zinc-200 dark:bg-zinc-800 aspect-[4/3] mb-5 border border-zinc-200 dark:border-zinc-800 group-hover:border-yc-yellow/50 transition-all duration-500 rounded-sm">
                   <Image
-                    src={bike.mainImage}
+                    src={bike.mainImage.url}
                     alt={bike.title}
                     fill
                     className="object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"

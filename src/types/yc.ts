@@ -6,13 +6,20 @@ export interface Project {
   category: 'Restoration' | 'Modification'
   year: string
   engine?: string
-  image: string
-  gallery: string[]
+  image: ImageType
+  gallery: ImageType[]
   description: string
-  beforeImage?: string
-  afterImage?: string
+  beforeImage?: ImageType
+  afterImage?: ImageType
   clientLocation?: string
   slug?: string
+}
+
+export interface ImageType {
+  url: string
+  width: number
+  height: number
+  alt: string
 }
 
 export interface Testimonial {
@@ -32,8 +39,8 @@ export interface SaleBike {
   engine: string
   mileage: string
   description: string
-  mainImage: string
-  gallery: string[]
+  mainImage: ImageType
+  gallery: ImageType[]
   features: string[]
   slug?: string
   manufacturer: string
@@ -50,13 +57,31 @@ export function getManufacturerName(
     return manufacturer.name || ''
   }
   return ''
+  return ''
+}
+
+// Helper to safely get image data
+const getImageData = (img: Media | undefined | string): ImageType => {
+  if (typeof img === 'string') {
+    return {
+      url: img,
+      width: 0,
+      height: 0,
+      alt: '',
+    }
+  }
+  return {
+    url: img?.url || '/placeholder.jpg',
+    width: img?.width || 0,
+    height: img?.height || 0,
+    alt: img?.alt || '',
+  }
 }
 
 // Helper function to convert Payload RestoredMoto to Project
 export function restoredMotoToProject(moto: RestoredMoto): Project {
   const heroImage = moto.heroImage as Media | undefined
   const images = moto.images as Media[] | undefined
-  const galleryUrls = images?.map((img) => img.url).filter((url): url is string => !!url) || []
 
   return {
     id: String(moto.id),
@@ -64,11 +89,11 @@ export function restoredMotoToProject(moto: RestoredMoto): Project {
     category: 'Restoration',
     year: String(moto.year),
     engine: getManufacturerName(moto.manufacturer),
-    image: heroImage?.url || '/placeholder.jpg',
-    gallery: galleryUrls,
+    image: getImageData(heroImage),
+    gallery: images?.map(getImageData) || [],
     description: getPlainTextFromRichText(moto.content),
-    beforeImage: images?.[0]?.url || undefined,
-    afterImage: heroImage?.url || undefined,
+    beforeImage: images?.[0] ? getImageData(images[0]) : undefined,
+    afterImage: heroImage ? getImageData(heroImage) : undefined,
     clientLocation: 'India',
     slug: moto.slug || undefined,
   }
@@ -78,7 +103,6 @@ export function restoredMotoToProject(moto: RestoredMoto): Project {
 export function customMotoToProject(moto: CustomMotorcycle): Project {
   const heroImage = moto.heroImage as Media | undefined
   const images = moto.images as Media[] | undefined
-  const galleryUrls = images?.map((img) => img.url).filter((url): url is string => !!url) || []
 
   return {
     id: String(moto.id),
@@ -86,11 +110,11 @@ export function customMotoToProject(moto: CustomMotorcycle): Project {
     category: 'Modification',
     year: String(moto.year),
     engine: getManufacturerName(moto.manufacturer),
-    image: heroImage?.url || '/placeholder.jpg',
-    gallery: galleryUrls,
+    image: getImageData(heroImage),
+    gallery: images?.map(getImageData) || [],
     description: getPlainTextFromRichText(moto.content),
-    beforeImage: images?.[0]?.url || undefined,
-    afterImage: heroImage?.url || undefined,
+    beforeImage: images?.[0] ? getImageData(images[0]) : undefined,
+    afterImage: heroImage ? getImageData(heroImage) : undefined,
     clientLocation: 'India',
     slug: moto.slug || undefined,
   }
@@ -146,7 +170,6 @@ export const testimonials: Testimonial[] = [
 export function saleToSaleBike(sale: Sale): SaleBike {
   const mainImage = sale.mainImage as Media | undefined
   const gallery = sale.gallery as Media[] | undefined
-  const galleryUrls = gallery?.map((img) => img.url).filter((url): url is string => !!url) || []
 
   // Convert lowercase status from Payload to capitalized status for frontend
   const statusMap: Record<string, SaleBike['status']> = {
@@ -170,8 +193,8 @@ export function saleToSaleBike(sale: Sale): SaleBike {
     registrationDate: sale.registrationDate || undefined,
     mileage: sale.mileage,
     description: getPlainTextFromRichText(sale.description),
-    mainImage: mainImage?.url || '/placeholder.jpg',
-    gallery: galleryUrls,
+    mainImage: getImageData(mainImage),
+    gallery: gallery?.map(getImageData) || [],
     features,
     slug: sale.slug || undefined,
   }

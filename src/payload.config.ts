@@ -15,6 +15,7 @@ import { CustomMotorcycles } from './collections/CustomMotorcycles'
 import { Sales } from './collections/Sales'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { Manufacturers } from './collections/Manufacturers'
+import { About } from './About/config'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { SiteSettings } from './SiteSettings/config'
@@ -87,7 +88,7 @@ export default buildConfig({
     Manufacturers,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, SiteSettings],
+  globals: [Header, Footer, SiteSettings, About],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

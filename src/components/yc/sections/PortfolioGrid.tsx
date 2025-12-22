@@ -120,7 +120,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({
               className="flex-shrink-0 w-[85vw] sm:w-[400px] snap-center group relative aspect-[3/4] rounded-sm overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm"
             >
               <Image
-                src={project.image}
+                src={project.image.url}
                 alt={project.title}
                 fill
                 className="object-cover opacity-90 transition-opacity duration-500"
@@ -170,7 +170,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({
               {/* Image Layer */}
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <Image
-                  src={project.image}
+                  src={project.image.url}
                   alt={project.title}
                   fill
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 grayscale-[0.2] group-hover:grayscale-0"

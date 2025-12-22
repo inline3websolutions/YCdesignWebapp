@@ -20,8 +20,8 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
   const contentRef = useRef<HTMLDivElement>(null)
 
   const allImages = [project.image, ...project.gallery]
-  const beforeImage = project.beforeImage || project.image
-  const afterImage = project.image
+  const beforeImage = project.beforeImage ? project.beforeImage.url : project.image.url
+  const afterImage = project.afterImage ? project.afterImage.url : project.image.url
 
   useEffect(() => {
     if (!contentRef.current) return
@@ -96,12 +96,14 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
           {/* Left Column - Gallery */}
           <div className="space-y-6">
             {/* Main Image Display */}
-            <div className="relative aspect-[4/3] bg-zinc-200 dark:bg-zinc-800 rounded-sm overflow-hidden border border-zinc-200 dark:border-zinc-800">
+            <div className="relative bg-zinc-200 dark:bg-zinc-800 rounded-sm overflow-hidden border border-zinc-200 dark:border-zinc-800">
               <Image
-                src={allImages[currentImageIndex]}
+                src={allImages[currentImageIndex].url}
                 alt={project.title}
-                fill
-                className="object-cover"
+                width={allImages[currentImageIndex].width}
+                height={allImages[currentImageIndex].height}
+                className="w-full h-auto object-contain"
+                priority
                 unoptimized
               />
               <button
@@ -143,7 +145,7 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
                     }`}
                   >
                     <Image
-                      src={img}
+                      src={img.url}
                       alt={`Thumbnail ${idx + 1}`}
                       fill
                       className="object-cover"
@@ -294,7 +296,7 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={allImages[currentImageIndex]}
+              src={allImages[currentImageIndex].url}
               alt={project.title}
               fill
               className="object-contain"
