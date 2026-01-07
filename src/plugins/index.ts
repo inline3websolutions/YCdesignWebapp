@@ -16,13 +16,13 @@ import { getServerSideURL } from '@/utilities/getURL'
 const generateTitle: GenerateTitle<Post | Page | RestoredMoto> = ({ doc }) => {
   // For RestoredMoto, use 'name' field instead of 'title'
   if ('name' in doc && doc.name) {
-    return `${doc.name} | Payload Website Template`
+    return `${doc.name} | YC Design`
   }
   // For Post and Page, use 'title' field
   if ('title' in doc && doc.title) {
-    return `${doc.title} | Payload Website Template`
+    return `${doc.title} | YC Design`
   }
-  return 'Payload Website Template'
+  return 'YC Design'
 }
 
 const generateURL: GenerateURL<Post | Page | RestoredMoto> = ({ doc }) => {
