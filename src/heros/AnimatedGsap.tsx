@@ -1,14 +1,10 @@
 'use client'
 import React, { useRef, useLayoutEffect } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Page } from '@/payload-types'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 import { cn } from '@/utilities/ui'
 import { GearIcon } from '@/components/ui/Illustrations'
-
-gsap.registerPlugin(ScrollTrigger)
 
 type AnimatedProps = Page['hero'] & { className?: string }
 
@@ -19,30 +15,40 @@ export const AnimatedGsapHero: React.FC<AnimatedProps> = (props) => {
   const gearRef = useRef<SVGSVGElement>(null)
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      const imgEl = imgWrapperRef.current?.querySelector('img')
-      if (imgEl) {
-        gsap.to(imgEl, {
-          y: '30%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-          },
-        })
-      }
-      if (gearRef.current) {
-        gsap.to(gearRef.current, {
-          rotation: 360,
-          duration: 20,
-          repeat: -1,
-          ease: 'linear',
-        })
-      }
-    }, containerRef)
-    return () => ctx.revert()
+    let ctx: any = null
+
+    const initAnimations = async () => {
+      const gsap = (await import('gsap')).gsap
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
+
+      ctx = gsap.context(() => {
+        const imgEl = imgWrapperRef.current?.querySelector('img')
+        if (imgEl) {
+          gsap.to(imgEl, {
+            y: '30%',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true,
+            },
+          })
+        }
+        if (gearRef.current) {
+          gsap.to(gearRef.current, {
+            rotation: 360,
+            duration: 20,
+            repeat: -1,
+            ease: 'linear',
+          })
+        }
+      }, containerRef)
+    }
+
+    initAnimations()
+    return () => ctx?.revert()
   }, [])
 
   return (

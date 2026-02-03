@@ -21,6 +21,7 @@ if (serverUrl) {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   images: {
     qualities: [25, 50, 75, 100],
     remotePatterns: [

@@ -4,11 +4,7 @@ import React, { useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Project } from '@/types/yc'
-
-gsap.registerPlugin(ScrollTrigger)
 
 interface PortfolioGridProps {
   title: string
@@ -32,39 +28,49 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({
   const filteredProjects = projects.filter((p) => p.category === filter).slice(0, 3)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header Animation
-      gsap.fromTo(
-        '.grid-header',
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 85%',
-          },
-        },
-      )
+    let ctx: any = null
 
-      // Desktop Grid Stagger
-      ScrollTrigger.batch('.desktop-card', {
-        onEnter: (batch) => {
-          gsap.to(batch, {
-            autoAlpha: 1,
+    const initAnimations = async () => {
+      const gsap = (await import('gsap')).gsap
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
+
+      ctx = gsap.context(() => {
+        // Header Animation
+        gsap.fromTo(
+          '.grid-header',
+          { y: 30, opacity: 0 },
+          {
             y: 0,
-            stagger: 0.15,
+            opacity: 1,
             duration: 0.8,
             ease: 'power3.out',
-          })
-        },
-        start: 'top 85%',
-      })
-    }, containerRef)
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top 85%',
+            },
+          },
+        )
 
-    return () => ctx.revert()
+        // Desktop Grid Stagger
+        ScrollTrigger.batch('.desktop-card', {
+          onEnter: (batch) => {
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              stagger: 0.15,
+              duration: 0.8,
+              ease: 'power3.out',
+            })
+          },
+          start: 'top 85%',
+        })
+      }, containerRef)
+    }
+
+    initAnimations()
+
+    return () => ctx?.revert()
   }, [])
 
   const getProjectLink = (project: Project) => {

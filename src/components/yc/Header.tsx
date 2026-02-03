@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import gsap from 'gsap'
 import { Logo } from '@/components/yc'
 import type { Header } from '@/payload-types'
 
@@ -23,14 +22,18 @@ const YCHeader: React.FC<YCHeaderProps> = ({ data }) => {
     }
     window.addEventListener('scroll', handleScroll)
 
-    // Initial enter animation
-    if (navRef.current) {
-      gsap.fromTo(
-        navRef.current,
-        { y: -100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-      )
+    // Initial enter animation - lazy load gsap
+    const initAnimation = async () => {
+      if (navRef.current) {
+        const gsap = (await import('gsap')).gsap
+        gsap.fromTo(
+          navRef.current,
+          { y: -100, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+        )
+      }
     }
+    initAnimation()
 
     return () => {
       window.removeEventListener('scroll', handleScroll)

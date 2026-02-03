@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect } from 'react'
 import { MapPin, ArrowDown } from 'lucide-react'
-import gsap from 'gsap'
 import { Logo } from '@/components/yc'
 
 const Hero: React.FC = () => {
@@ -13,54 +12,62 @@ const Hero: React.FC = () => {
   const textRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.5 })
+    let ctx: any = null
 
-      // 1. Initial State
-      gsap.set([leftLightRef.current, rightLightRef.current], { opacity: 0.1 })
-      gsap.set(logoRef.current, { opacity: 0, scale: 0.9 })
-      gsap.set(textRef.current, { opacity: 0, y: 20 })
+    const initAnimations = async () => {
+      const gsap = (await import('gsap')).gsap
 
-      // 2. Realistic Neon Flicker Sequence
-      const flicker = (target: gsap.TweenTarget) => {
-        const ftl = gsap.timeline()
-        ftl
-          .to(target, { opacity: 1, duration: 0.05 })
-          .to(target, { opacity: 0.1, duration: 0.05 })
-          .to(target, { opacity: 0.8, duration: 0.1 })
-          .to(target, { opacity: 0.1, duration: 0.1 })
-          .to(target, { opacity: 1, duration: 0.05 })
-          .to(target, { opacity: 0.3, duration: 0.3 })
-          .to(target, { opacity: 1, duration: 1.5 }) // Final ON state
-        return ftl
-      }
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline({ delay: 0.5 })
 
-      // Play flickering for both lights slightly offset
-      tl.add('lightsOn')
-        .add(flicker(leftLightRef.current), 'lightsOn')
-        .add(flicker(rightLightRef.current), 'lightsOn+=0.1')
+        // 1. Initial State
+        gsap.set([leftLightRef.current, rightLightRef.current], { opacity: 0.1 })
+        gsap.set(logoRef.current, { opacity: 0, scale: 0.9 })
+        gsap.set(textRef.current, { opacity: 0, y: 20 })
 
-      // 3. Logo Reveal (Illuminated by the lights)
-      tl.to(
-        logoRef.current,
-        {
-          opacity: 0.8,
-          scale: 1,
-          duration: 2,
-          ease: 'power2.out',
-          filter: 'drop-shadow(0 0 20px rgba(255, 193, 7, 0.3))',
-        },
-        'lightsOn+=0.5',
-      )
+        // 2. Realistic Neon Flicker Sequence
+        const flicker = (target: gsap.TweenTarget) => {
+          const ftl = gsap.timeline()
+          ftl
+            .to(target, { opacity: 1, duration: 0.05 })
+            .to(target, { opacity: 0.1, duration: 0.05 })
+            .to(target, { opacity: 0.8, duration: 0.1 })
+            .to(target, { opacity: 0.1, duration: 0.1 })
+            .to(target, { opacity: 1, duration: 0.05 })
+            .to(target, { opacity: 0.3, duration: 0.3 })
+            .to(target, { opacity: 1, duration: 1.5 }) // Final ON state
+          return ftl
+        }
 
-      // 4. Ambient Room Light Up
-      tl.to('.ambient-glow', { opacity: 0.4, duration: 2 }, 'lightsOn+=0.5')
+        // Play flickering for both lights slightly offset
+        tl.add('lightsOn')
+          .add(flicker(leftLightRef.current), 'lightsOn')
+          .add(flicker(rightLightRef.current), 'lightsOn+=0.1')
 
-      // 5. Minimal Text Reveal
-      tl.to(textRef.current, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '-=1')
-    }, containerRef)
+        // 3. Logo Reveal (Illuminated by the lights)
+        tl.to(
+          logoRef.current,
+          {
+            opacity: 0.8,
+            scale: 1,
+            duration: 2,
+            ease: 'power2.out',
+            filter: 'drop-shadow(0 0 20px rgba(255, 193, 7, 0.3))',
+          },
+          'lightsOn+=0.5',
+        )
 
-    return () => ctx.revert()
+        // 4. Ambient Room Light Up
+        tl.to('.ambient-glow', { opacity: 0.4, duration: 2 }, 'lightsOn+=0.5')
+
+        // 5. Minimal Text Reveal
+        tl.to(textRef.current, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '-=1')
+      }, containerRef)
+    }
+
+    initAnimations()
+
+    return () => ctx?.revert()
   }, [])
 
   return (

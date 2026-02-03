@@ -1,11 +1,7 @@
 'use client'
 
 import React, { useRef, useEffect, useState } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
-
-gsap.registerPlugin(ScrollTrigger)
 
 interface FormData {
   name: string
@@ -33,24 +29,34 @@ const Contact: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        contentRef.current,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 80%',
-          },
-        },
-      )
-    }, containerRef)
+    let ctx: any = null
 
-    return () => ctx.revert()
+    const initAnimations = async () => {
+      const gsap = (await import('gsap')).gsap
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
+
+      ctx = gsap.context(() => {
+        gsap.fromTo(
+          contentRef.current,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top 80%',
+            },
+          },
+        )
+      }, containerRef)
+    }
+
+    initAnimations()
+
+    return () => ctx?.revert()
   }, [])
 
   const handleChange = (

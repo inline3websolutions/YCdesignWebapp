@@ -1,0 +1,117 @@
+
+> yc-design-website@1.0.0 build C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp
+> cross-env BUILD=true NODE_OPTIONS=--no-deprecation next build
+
+   Γû▓ Next.js 15.5.9
+
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+
+warn - The class `duration-[8000ms]` is ambiguous and matches multiple utilities.
+warn - If this is content and not a class, replace it with `duration-&lsqb;8000ms&rsqb;` to silence this warning.
+ Γ£ô Compiled successfully in 81s
+   Linting and checking validity of types ...
+
+./src/app/(frontend)/about/page.client.tsx
+67:63  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+295:43  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+319:46  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/(frontend)/layout.tsx
+36:9  Warning: Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+./src/blocks/RenderBlocks.tsx
+10:79  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/blocks/YCInstagramGrid/Component.tsx
+15:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/yc/sections/About.tsx
+12:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/yc/sections/Contact.tsx
+32:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/yc/sections/Hero.tsx
+15:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/yc/sections/PortfolioGrid.tsx
+31:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/heros/AnimatedGsap.tsx
+18:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/heros/RenderHero.tsx
+19:70  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/providers/Theme/InitTheme/index.tsx
+8:5  Warning: `next/script`'s `beforeInteractive` strategy should not be used outside of `pages/_document.js`. See: https://nextjs.org/docs/messages/no-before-interactive-script-outside-document  @next/next/no-before-interactive-script-outside-document
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/28) ...
+   Generating static pages (7/28) 
+   Generating static pages (14/28) 
+   Generating static pages (21/28) 
+ Γ£ô Generating static pages (28/28)
+   Finalizing page optimization ...
+   Collecting build traces ...
+ ΓÜá Failed to copy traced files for C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\server\pages\_app.js [Error: EPERM: operation not permitted, symlink 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\node_modules\.pnpm\react@19.1.0\node_modules\react' -> 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\standalone\node_modules\react'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\node_modules\\.pnpm\\react@19.1.0\\node_modules\\react',
+  dest: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\.next\\standalone\\node_modules\\react'
+}
+ ΓÜá Failed to copy traced files for C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\server\pages\_error.js [Error: EPERM: operation not permitted, symlink 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\node_modules\.pnpm\react@19.1.0\node_modules\react' -> 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\standalone\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@playwright+test@1.56.1_react-dom@19.1.0_react@19.1.0__react@19.1.0_sass@1.77.4\node_modules\react'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\node_modules\\.pnpm\\react@19.1.0\\node_modules\\react',
+  dest: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\.next\\standalone\\node_modules\\.pnpm\\next@15.5.9_@babel+core@7.28.5_@playwright+test@1.56.1_react-dom@19.1.0_react@19.1.0__react@19.1.0_sass@1.77.4\\node_modules\\react'
+}
+ ΓÜá Failed to copy traced files for C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\server\pages\_document.js [Error: EPERM: operation not permitted, symlink 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\node_modules\.pnpm\client-only@0.0.1\node_modules\client-only' -> 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\standalone\node_modules\.pnpm\styled-jsx@5.1.6_@babel+core@7.28.5_react@19.1.0\node_modules\client-only'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\node_modules\\.pnpm\\client-only@0.0.1\\node_modules\\client-only',
+  dest: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\.next\\standalone\\node_modules\\.pnpm\\styled-jsx@5.1.6_@babel+core@7.28.5_react@19.1.0\\node_modules\\client-only'
+}
+ ΓÜá Failed to copy traced files for C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\server\app\(frontend)\(sitemaps)\pages-sitemap.xml\route.js [Error: EPERM: operation not permitted, symlink 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\node_modules\.pnpm\color-name@1.1.4\node_modules\color-name' -> 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\standalone\node_modules\.pnpm\color-convert@2.0.1\node_modules\color-name'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\node_modules\\.pnpm\\color-name@1.1.4\\node_modules\\color-name',
+  dest: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\.next\\standalone\\node_modules\\.pnpm\\color-convert@2.0.1\\node_modules\\color-name'
+}
+ ΓÜá Failed to copy traced files for C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\server\app\(frontend)\(sitemaps)\posts-sitemap.xml\route.js [Error: EPERM: operation not permitted, symlink 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\node_modules\.pnpm\color-string@1.9.1\node_modules\color-string' -> 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\standalone\node_modules\.pnpm\color@4.2.3\node_modules\color-string'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\node_modules\\.pnpm\\color-string@1.9.1\\node_modules\\color-string',
+  dest: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\.next\\standalone\\node_modules\\.pnpm\\color@4.2.3\\node_modules\\color-string'
+}
+ ΓÜá Failed to copy traced files for C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\server\app\(frontend)\[slug]\page.js [Error: EPERM: operation not permitted, symlink 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\node_modules\.pnpm\is-arrayish@0.3.4\node_modules\is-arrayish' -> 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\standalone\node_modules\.pnpm\simple-swizzle@0.2.4\node_modules\is-arrayish'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\node_modules\\.pnpm\\is-arrayish@0.3.4\\node_modules\\is-arrayish',
+  dest: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\.next\\standalone\\node_modules\\.pnpm\\simple-swizzle@0.2.4\\node_modules\\is-arrayish'
+}
+ ΓÜá Failed to copy traced files for C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\server\app\(payload)\api\graphql\route.js [Error: EPERM: operation not permitted, symlink 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\node_modules\.pnpm\graphql@16.12.0\node_modules\graphql' -> 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\standalone\node_modules\graphql'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\node_modules\\.pnpm\\graphql@16.12.0\\node_modules\\graphql',
+  dest: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\.next\\standalone\\node_modules\\graphql'
+}
+
+> Build error occurred
+[Error: EPERM: operation not permitted, symlink 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\node_modules\.pnpm\@next+env@15.5.9\node_modules\@next\env' -> 'C:\Users\skhad\Desktop\Payload Website\ycd v2\YCdesignWebapp\.next\standalone\node_modules\.pnpm\next@15.5.9_@babel+core@7.28.5_@playwright+test@1.56.1_react-dom@19.1.0_react@19.1.0__react@19.1.0_sass@1.77.4\node_modules\@next\env'] {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\node_modules\\.pnpm\\@next+env@15.5.9\\node_modules\\@next\\env',
+  dest: 'C:\\Users\\skhad\\Desktop\\Payload Website\\ycd v2\\YCdesignWebapp\\.next\\standalone\\node_modules\\.pnpm\\next@15.5.9_@babel+core@7.28.5_@playwright+test@1.56.1_react-dom@19.1.0_react@19.1.0__react@19.1.0_sass@1.77.4\\node_modules\\@next\\env'
+}
+ΓÇëELIFECYCLEΓÇë Command failed with exit code 1.

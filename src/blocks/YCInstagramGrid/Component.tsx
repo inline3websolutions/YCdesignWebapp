@@ -2,12 +2,8 @@
 
 import React, { useEffect, useRef } from 'react'
 import { Instagram, Heart, MessageCircle, ExternalLink } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Page } from '@/payload-types'
 import { Media } from '@/components/Media'
-
-gsap.registerPlugin(ScrollTrigger)
 
 type Props = Extract<Page['layout'][number], { blockType: 'ycInstagramGrid' }>
 
@@ -16,44 +12,54 @@ export const YCInstagramGridBlock: React.FC<Props> = (props) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header Animation
-      gsap.fromTo(
-        '.ig-header',
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 80%',
-          },
-        },
-      )
+    let ctx: any = null
 
-      // Grid Items Animation
-      gsap.fromTo(
-        '.ig-item',
-        { opacity: 0, scale: 0.9, y: 20, rotationY: 15 },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          rotationY: 0,
-          duration: 0.8,
-          stagger: 0.05,
-          ease: 'back.out(1.2)',
-          scrollTrigger: {
-            trigger: '.ig-grid',
-            start: 'top 75%',
-          },
-        },
-      )
-    }, containerRef)
+    const initAnimations = async () => {
+      const gsap = (await import('gsap')).gsap
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
 
-    return () => ctx.revert()
+      ctx = gsap.context(() => {
+        // Header Animation
+        gsap.fromTo(
+          '.ig-header',
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top 80%',
+            },
+          },
+        )
+
+        // Grid Items Animation
+        gsap.fromTo(
+          '.ig-item',
+          { opacity: 0, scale: 0.9, y: 20, rotationY: 15 },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            rotationY: 0,
+            duration: 0.8,
+            stagger: 0.05,
+            ease: 'back.out(1.2)',
+            scrollTrigger: {
+              trigger: '.ig-grid',
+              start: 'top 75%',
+            },
+          },
+        )
+      }, containerRef)
+    }
+
+    initAnimations()
+
+    return () => ctx?.revert()
   }, [])
 
   return (

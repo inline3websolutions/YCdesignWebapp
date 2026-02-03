@@ -1,10 +1,24 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { Loader as YCLoader, YCHeader, YCFooter } from '@/components/yc'
+import dynamic from 'next/dynamic'
+import { YCHeader, YCFooter } from '@/components/yc'
 import type { Header, Footer } from '@/payload-types'
 import { Search } from 'lucide-react'
-import GlobalSearch from './GlobalSearch'
+
+// Dynamic imports for heavy components - only load when needed
+const YCLoader = dynamic(() => import('@/components/yc/Loader'), {
+  ssr: false,
+  loading: () => (
+    <div className="fixed inset-0 z-[100] bg-[#09090B] flex items-center justify-center">
+      <div className="w-12 h-12 border-2 border-yc-yellow/30 border-t-yc-yellow rounded-full animate-spin" />
+    </div>
+  ),
+})
+
+const GlobalSearch = dynamic(() => import('./GlobalSearch'), {
+  ssr: false,
+})
 
 interface YCLayoutWrapperProps {
   children: React.ReactNode
@@ -88,7 +102,7 @@ const YCLayoutWrapper: React.FC<YCLayoutWrapperProps> = ({
       </button>
 
       {/* Global Search Modal */}
-      <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+      {searchOpen && <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />}
     </>
   )
 }

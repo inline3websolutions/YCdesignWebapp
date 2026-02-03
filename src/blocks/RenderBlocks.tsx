@@ -1,41 +1,59 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, Suspense, lazy, ComponentType } from 'react'
 
 import type { Page } from '@/payload-types'
 
-import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
-import { CallToActionBlock } from '@/blocks/CallToAction/Component'
-import { ContentBlock } from '@/blocks/Content/Component'
-import { FormBlock } from '@/blocks/Form/Component'
-import { MediaBlock } from '@/blocks/MediaBlock/Component'
-import { YCMarqueeBlock } from '@/blocks/YCMarquee/Component'
-import { YCAboutBlock } from '@/blocks/YCAbout/Component'
-import { YCServicesBlock } from '@/blocks/YCServices/Component'
-import { YCRestoredGalleryBlock } from '@/blocks/YCRestoredGallery/Component'
-import { YCCustomFeatureBlock } from '@/blocks/YCCustomFeature/Component'
-import { YCHeroBlock } from '@/blocks/YCHero/Component'
-import { YCHeroSliderBlock } from '@/blocks/YCHeroSlider/Component'
-import { YCPortfolioGridBlock } from '@/blocks/YCPortfolioGrid/Component'
-import { YCTestimonialsBlock } from '@/blocks/YCTestimonials/Component'
-import { YCContactBlock } from '@/blocks/YCContact/Component'
-import { YCInstagramGridBlock } from '@/blocks/YCInstagramGrid/Component'
+// Minimal loading placeholder for blocks
+const BlockLoader = () => <div className="w-full h-32 bg-zinc-100 dark:bg-zinc-900 animate-pulse" />
 
-const blockComponents = {
-  archive: ArchiveBlock,
-  content: ContentBlock,
-  cta: CallToActionBlock,
-  formBlock: FormBlock,
-  mediaBlock: MediaBlock,
-  ycMarquee: YCMarqueeBlock,
-  ycAbout: YCAboutBlock,
-  ycServices: YCServicesBlock,
-  ycRestoredGallery: YCRestoredGalleryBlock,
-  ycCustomFeature: YCCustomFeatureBlock,
-  ycHero: YCHeroBlock,
-  ycHeroSlider: YCHeroSliderBlock,
-  ycPortfolioGrid: YCPortfolioGridBlock,
-  ycTestimonials: YCTestimonialsBlock,
-  ycContact: YCContactBlock,
-  ycInstagramGrid: YCInstagramGridBlock,
+// Lazy load ALL blocks - they'll only be loaded when actually used on a page
+// This prevents loading all 15 blocks + GSAP instances at startup
+const blockComponents: Record<string, React.LazyExoticComponent<ComponentType<any>>> = {
+  archive: lazy(() =>
+    import('@/blocks/ArchiveBlock/Component').then((m) => ({ default: m.ArchiveBlock })),
+  ),
+  content: lazy(() =>
+    import('@/blocks/Content/Component').then((m) => ({ default: m.ContentBlock })),
+  ),
+  cta: lazy(() =>
+    import('@/blocks/CallToAction/Component').then((m) => ({ default: m.CallToActionBlock })),
+  ),
+  formBlock: lazy(() => import('@/blocks/Form/Component').then((m) => ({ default: m.FormBlock }))),
+  mediaBlock: lazy(() =>
+    import('@/blocks/MediaBlock/Component').then((m) => ({ default: m.MediaBlock })),
+  ),
+  ycMarquee: lazy(() =>
+    import('@/blocks/YCMarquee/Component').then((m) => ({ default: m.YCMarqueeBlock })),
+  ),
+  ycAbout: lazy(() =>
+    import('@/blocks/YCAbout/Component').then((m) => ({ default: m.YCAboutBlock })),
+  ),
+  ycServices: lazy(() =>
+    import('@/blocks/YCServices/Component').then((m) => ({ default: m.YCServicesBlock })),
+  ),
+  ycRestoredGallery: lazy(() =>
+    import('@/blocks/YCRestoredGallery/Component').then((m) => ({
+      default: m.YCRestoredGalleryBlock,
+    })),
+  ),
+  ycCustomFeature: lazy(() =>
+    import('@/blocks/YCCustomFeature/Component').then((m) => ({ default: m.YCCustomFeatureBlock })),
+  ),
+  ycHero: lazy(() => import('@/blocks/YCHero/Component').then((m) => ({ default: m.YCHeroBlock }))),
+  ycHeroSlider: lazy(() =>
+    import('@/blocks/YCHeroSlider/Component').then((m) => ({ default: m.YCHeroSliderBlock })),
+  ),
+  ycPortfolioGrid: lazy(() =>
+    import('@/blocks/YCPortfolioGrid/Component').then((m) => ({ default: m.YCPortfolioGridBlock })),
+  ),
+  ycTestimonials: lazy(() =>
+    import('@/blocks/YCTestimonials/Component').then((m) => ({ default: m.YCTestimonialsBlock })),
+  ),
+  ycContact: lazy(() =>
+    import('@/blocks/YCContact/Component').then((m) => ({ default: m.YCContactBlock })),
+  ),
+  ycInstagramGrid: lazy(() =>
+    import('@/blocks/YCInstagramGrid/Component').then((m) => ({ default: m.YCInstagramGridBlock })),
+  ),
 }
 
 export const RenderBlocks: React.FC<{
@@ -56,8 +74,9 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               return (
-                // @ts-expect-error there may be some mismatch between the expected types here
-                <Block {...block} key={index} disableInnerContainer />
+                <Suspense key={index} fallback={<BlockLoader />}>
+                  <Block {...block} disableInnerContainer />
+                </Suspense>
               )
             }
           }

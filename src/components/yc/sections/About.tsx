@@ -1,11 +1,7 @@
 'use client'
 
 import React, { useRef, useEffect } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Image from 'next/image'
-
-gsap.registerPlugin(ScrollTrigger)
 
 const About: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -13,59 +9,69 @@ const About: React.FC = () => {
   const textRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Image Reveal
-      gsap.fromTo(
-        imageRef.current,
-        { x: -50, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: imageRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        },
-      )
+    let ctx: any = null
 
-      // Text Reveal
-      gsap.fromTo(
-        textRef.current,
-        { x: 50, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          delay: 0.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: textRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        },
-      )
+    const initAnimations = async () => {
+      const gsap = (await import('gsap')).gsap
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
 
-      // Counter Animation
-      const counters = document.querySelectorAll('.stat-counter')
-      counters.forEach((counter) => {
-        gsap.from(counter, {
-          textContent: 0,
-          duration: 2,
-          ease: 'power1.out',
-          snap: { textContent: 1 },
-          scrollTrigger: {
-            trigger: counter,
-            start: 'top 90%',
+      ctx = gsap.context(() => {
+        // Image Reveal
+        gsap.fromTo(
+          imageRef.current,
+          { x: -50, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: imageRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse',
+            },
           },
+        )
+
+        // Text Reveal
+        gsap.fromTo(
+          textRef.current,
+          { x: 50, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 1,
+            delay: 0.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: textRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse',
+            },
+          },
+        )
+
+        // Counter Animation
+        const counters = document.querySelectorAll('.stat-counter')
+        counters.forEach((counter) => {
+          gsap.from(counter, {
+            textContent: 0,
+            duration: 2,
+            ease: 'power1.out',
+            snap: { textContent: 1 },
+            scrollTrigger: {
+              trigger: counter,
+              start: 'top 90%',
+            },
+          })
         })
-      })
-    }, containerRef)
+      }, containerRef)
+    }
 
-    return () => ctx.revert()
+    initAnimations()
+
+    return () => ctx?.revert()
   }, [])
 
   return (

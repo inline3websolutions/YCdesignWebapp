@@ -8,11 +8,11 @@ nixPkgs = ["nodejs_20"]
 cmds = ["corepack enable", "pnpm install --frozen-lockfile"]
 
 [phases.build]
-cmds = ["rm -rf .next || true", "pnpm run build"]
+cmds = ["rm -rf .next || true", "pnpm run build", "cp -r public .next/standalone/public", "cp -r .next/static .next/standalone/.next/static"]
 
 # Disable caching of .next folder
 [caches]
 skip = [".next"]
 
 [start]
-cmd = "pnpm run start"
+cmd = "node .next/standalone/server.js"

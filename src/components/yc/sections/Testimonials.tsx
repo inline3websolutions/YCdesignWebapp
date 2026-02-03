@@ -2,7 +2,6 @@
 
 import React, { useState, useRef } from 'react'
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react'
-import gsap from 'gsap'
 import type { Testimonial } from '@/types/yc'
 
 interface TestimonialsProps {
@@ -13,12 +12,13 @@ const Testimonials: React.FC<TestimonialsProps> = ({ testimonials }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const contentRef = useRef<HTMLDivElement>(null)
 
-  const animateChange = (callback: () => void) => {
+  const animateChange = async (callback: () => void) => {
     if (!contentRef.current) {
       callback()
       return
     }
 
+    const gsap = (await import('gsap')).gsap
     const tl = gsap.timeline()
     tl.to(contentRef.current, { opacity: 0, x: -20, duration: 0.3, ease: 'power2.in' })
       .call(callback)

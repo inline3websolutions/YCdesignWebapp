@@ -29,8 +29,6 @@ import { s3Storage } from '@payloadcms/storage-s3'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const isBuild = process.env.BUILD === 'true'
-
 export default buildConfig({
   admin: {
     components: {
@@ -71,10 +69,25 @@ export default buildConfig({
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: mongooseAdapter({
-    url:
-      isBuild || process.env.NODE_ENV === 'development'
-        ? process.env.BUILD_DATABASE || ''
-        : process.env.DATABASE_URI || '',
+    // Determine which database URL to use:
+    // - DATABASE_URI: Internal Railway URL (only works inside Railway network during actual deployment)
+    // - BUILD_DATABASE: Public URL, works from anywhere (local dev, external services)
+    //
+    // RAILWAY_DEPLOYMENT_ID is set ONLY during actual Railway deployments (build + runtime)
+    // It is NOT set by `railway run` locally, making it a reliable way to detect real deployments
+    url: (() => {
+      const isRailwayDeployment = !!process.env.RAILWAY_DEPLOYMENT_ID
+      const databaseUri = process.env.DATABASE_URI || ''
+      const buildDatabase = process.env.BUILD_DATABASE || ''
+
+      if (isRailwayDeployment) {
+        // On Railway: prefer internal URL for cost savings
+        return databaseUri || buildDatabase
+      }
+
+      // Local dev (including `railway run`): use public URL
+      return buildDatabase || databaseUri
+    })(),
   }),
   collections: [
     Pages,
