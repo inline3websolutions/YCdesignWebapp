@@ -31,7 +31,10 @@ ARG S3_REGION
 ARG S3_ENDPOINT
 ARG CRON_SECRET
 ARG PREVIEW_SECRET
-ARG RAILWAY_DEPLOYMENT_ID
+# NOTE: Do NOT pass RAILWAY_DEPLOYMENT_ID here — the build container
+# can't reach Railway's private network. Without this ARG, payload.config.ts
+# falls back to BUILD_DATABASE (public URL). At runtime, Railway injects
+# it as a regular env var so the internal URL is used correctly.
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
