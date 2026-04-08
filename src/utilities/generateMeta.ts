@@ -26,7 +26,12 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title ? doc?.meta?.title + ' | YC Design' : 'YC Design'
+  let title = 'YC Design'
+  if (doc?.meta?.title) {
+    title = doc.meta.title.includes('YC Design') 
+      ? doc.meta.title 
+      : `${doc.meta.title} | YC Design`
+  }
 
   return {
     description: doc?.meta?.description,

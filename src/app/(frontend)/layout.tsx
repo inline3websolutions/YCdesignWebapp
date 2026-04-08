@@ -21,16 +21,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { isEnabled } = await draftMode()
 
   // Fetch header and footer data from Payload
-  const headerData: Header = await getCachedGlobal('header', 1)()
-  const footerData: Footer = await getCachedGlobal('footer', 1)()
-  const siteSettings: SiteSetting = await getCachedGlobal('site-settings', 1)()
+  const headerData = (await getCachedGlobal('header', 1)()) as Header
+  const footerData = (await getCachedGlobal('footer', 1)()) as Footer
+  const siteSettings = (await getCachedGlobal('site-settings', 1)()) as SiteSetting
 
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -67,6 +65,6 @@ export const metadata: Metadata = {
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
+    creator: '@yogichhabria_ycdesign',
   },
 }

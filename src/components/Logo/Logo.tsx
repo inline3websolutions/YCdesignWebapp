@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import React from 'react'
+import { Logo as YCLogo } from '@/components/yc'
 
 interface Props {
   className?: string
@@ -8,22 +9,9 @@ interface Props {
 }
 
 export const Logo = (props: Props) => {
-  const { loading: loadingFromProps, priority: priorityFromProps, className } = props
-
-  const loading = loadingFromProps || 'lazy'
-  const priority = priorityFromProps || 'low'
+  const { className } = props
 
   return (
-    /* eslint-disable @next/next/no-img-element */
-    <img
-      alt="YC design Logo"
-      width={193}
-      height={48}
-      loading={loading}
-      fetchPriority={priority}
-      decoding="async"
-      className={clsx('max-w-[9.375rem] w-full h-[48px]', className)}
-      src="https://yc-design.in//api/media/file/YCdesign%20Logo.svg"
-    />
+    <YCLogo className={clsx('max-w-[9.375rem] w-full h-auto', className)} />
   )
 }
