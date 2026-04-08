@@ -88,6 +88,9 @@ export default buildConfig({
       // Local dev (including `railway run`): use public URL
       return buildDatabase || databaseUri
     })(),
+    connectOptions: {
+      autoIndex: false,
+    },
   }),
   collections: [
     Pages,
